@@ -1,0 +1,39 @@
+{
+    "name": "kunde",
+    "version": "2025.10.1",
+    "private": true,
+    "description": "Pulumi",
+    "keywords": [
+        "Pulumi",
+        "Kubernetes",
+        "Helm",
+        "TypeScript",
+        "Node"
+    ],
+    "homepage": "https://www.h-ka.de",
+    "license": "GPL-3.0-or-later",
+    "author": "Juergen Zimmermann",
+    "type": "module",
+    "dependencies": {
+        "@pulumi/kubernetes": "4.23.0",
+        "@pulumi/pulumi": "3.203.0",
+        "typescript": "5.9.3"
+    },
+    "devDependencies": {
+        "@tsconfig/node24": "24.0.1",
+        "@tsconfig/strictest": "2.0.6",
+        "@types/node": "24.8.1"
+    },
+    "packageManager": "pnpm@10.18.3",
+    "engines": {
+        "node": ">=25.0.0",
+        "pnpm": ">=10.18.3"
+    },
+    "devEngines": {
+        "runtime": {
+            "name": "node",
+            "version": "25.0.0",
+            "onFail": "download"
+        }
+    }
+}

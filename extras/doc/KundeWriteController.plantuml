@@ -1,0 +1,116 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+@startuml KundeWriteController
+
+skinparam classAttributeIconSize 0
+
+package org.springframework {
+package stereotype {
+        annotation Controller
+    }
+
+    package web {
+        interface ErrorResponse
+
+        package bind {
+            ' TODO Gradle: "exception" wird erst AsciiDoctor_plugin 5.x unterstuetzt
+            exception MethodArgumentNotValidException
+
+            package annotation {
+                annotation RequestMapping
+                annotation PathVariable
+                annotation RequestBody
+                annotation ExceptionHandler
+            }
+
+            RequestMapping .down[hidden].> MethodArgumentNotValidException
+            PathVariable .right[hidden].> RequestMapping
+            Controller .right[hidden].> PathVariable
+        }
+    }
+
+    package http {
+        class ResponseEntity<T>
+
+        package converter {
+            exception HttpMessageNotReadableException
+        }
+    }
+}
+
+package jakarta.servlet.http {
+    interface HttpServletRequest
+
+    HttpMessageNotReadableException .down[hidden].> HttpServletRequest
+}
+
+package java.util {
+    interface Collection<T>
+    class UUID
+
+    UUID .up[hidden].> Collection
+    Collection .up[hidden].> HttpServletRequest
+}
+
+package com.acme.kunde {
+    package service {
+        class KundeWriteService << control >> << @Service >>
+
+        exception EmailExistsException
+    }
+
+    package rest #DDDDDD {
+        ' TODO "record" statt "class" ab v1.2025.4 (Juni 2025)
+        ' https://github.com/plantuml/plantuml/commit/b8bb8a72b77ff169807429f70043150d2e380a67
+        record KundeDTO <<entity>>
+
+        class KundeWriteController << boundary >> << @Controller >> << @RequestMapping >> {
+            ~ @PostMapping post(@RequestBody KundeDTO: KundeDTO, request: HttpServletRequest): ResponseEntity<Void>
+            ~ @PutMapping put(@PathVariable id: UUID, @RequestBody KundeDTO: KundeDTO)
+            ~ @DeleteMapping deleteById(@PathVariable id: UUID)
+
+            ~ @ExceptionHandler onConstraintViolations(ex: MethodArgumentNotValidException): ErrorResponse
+            ~ @ExceptionHandler onEmailExists(ex: EmailExistsException): ErrorResponse
+            ~ @ExceptionHandler onMessageNotReadable(ex: HttpMessageNotReadableException): ErrorResponse
+        }
+
+        KundeWriteController o-down-> "1" KundeWriteService : service
+        KundeWriteController ..> KundeDTO
+        KundeWriteController ..> EmailExistsException
+
+        KundeWriteController .up.> ResponseEntity
+        KundeWriteController .up.> ErrorResponse
+        KundeWriteController .up.> HttpMessageNotReadableException
+        KundeWriteController .left.> HttpServletRequest
+
+        KundeWriteController .up.> Controller
+        KundeWriteController .up.> RequestMapping
+        KundeWriteController .up.> PathVariable
+        KundeWriteController .up.> RequestBody
+        KundeWriteController .up.> ExceptionHandler
+        KundeWriteController .up.> MethodArgumentNotValidException
+
+        KundeWriteController .right.> UUID
+        KundeWriteController .right.> Collection
+
+        KundeDTO .[hidden].> KundeWriteService
+    }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

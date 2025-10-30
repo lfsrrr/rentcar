@@ -1,0 +1,2 @@
+config:
+  kunde:k8sNamespace: acme
