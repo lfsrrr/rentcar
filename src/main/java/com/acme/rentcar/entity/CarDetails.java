@@ -4,7 +4,7 @@ import java.time.Year;
 import java.util.Objects;
 import java.util.UUID;
 
-// Diese Klasse hält die Details zum Car (1:1 Beziehung)
+
 public class CarDetails {
 
     private UUID id;
@@ -13,12 +13,10 @@ public class CarDetails {
     private EngineType motor; // Verwendet das neue Enum
     private Year baujahr;
 
-    // Optional: Leerer Konstruktor für JPA/Hibernate
+
     public CarDetails() {
-        // Leerer Konstruktor
     }
 
-    // Voller Konstruktor
     public CarDetails(final UUID id, final String farbe, final int sitzplaetze,
                       final EngineType motor, final Year baujahr) {
         this.id = id;
@@ -28,11 +26,10 @@ public class CarDetails {
         this.baujahr = baujahr;
     }
 
-    // --- Core Java Methoden ---
+
 
     @Override
     public boolean equals(final Object other) {
-        // equals/hashCode sollte immer auf dem ID-Feld basieren
         return other instanceof CarDetails details && Objects.equals(id, details.id);
     }
 
