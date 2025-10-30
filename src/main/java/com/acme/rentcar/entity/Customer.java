@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-// Diese Klasse hält die Kundeninformationen
 public class Customer {
 
     private UUID id;
@@ -13,12 +12,11 @@ public class Customer {
     private String email;
     private LocalDate geburtsdatum;
 
-    // Optional: Leerer Konstruktor für JPA/Hibernate
+
     public Customer() {
-        // Leerer Konstruktor
+
     }
 
-    // Voller Konstruktor
     public Customer(final UUID id, final String vorname, final String nachname,
                     final String email, final LocalDate geburtsdatum) {
         this.id = id;
@@ -28,7 +26,7 @@ public class Customer {
         this.geburtsdatum = geburtsdatum;
     }
 
-    // --- Core Java Methoden ---
+
 
     @Override
     public boolean equals(final Object other) {
@@ -52,7 +50,6 @@ public class Customer {
             '}';
     }
 
-    // --- Getter und Setter ---
 
     public UUID getId() {
         return id;

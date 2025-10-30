@@ -12,14 +12,11 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
-/**
- * Stellt eine Fake-Implementierung des CarRepository für den Meilenstein 5 bereit.
- * Simuliert Datenbankzugriff mit fest codierten ReadOnly-Daten.
- */
-@Repository // Markiert diese Klasse als Spring Repository Komponente
+
+@Repository
 public class CarRepositoryFake implements CarRepository {
 
-    // Statische Collection für die simulierten Car-Daten.
+
     private static final Collection<Car> FAKE_CARS = List.of(
         createTestCar(
             UUID.fromString("c0714b62-9e9f-43b6-905c-d5f9d14620f1"),
@@ -35,11 +32,11 @@ public class CarRepositoryFake implements CarRepository {
 
     @Override
     public Collection<Car> findAll() {
-        // Implementiert die erforderliche ReadOnly-Methode für den Meilenstein.
+
         return FAKE_CARS;
     }
 
-    // --- Hilfsmethode zur Erstellung der Daten und Abbildung der Beziehungen ---
+
 
     private static Car createTestCar(
         final UUID carId, final String hersteller, final String modell, final String kennzeichen,
@@ -49,7 +46,7 @@ public class CarRepositoryFake implements CarRepository {
         final UUID customerId = UUID.randomUUID();
         final UUID rentalId = UUID.randomUUID();
 
-        // 1. Erstellung der CarDetails (1:1 Beziehung)
+
         final CarDetails details = new CarDetails(
             UUID.randomUUID(),
             farbe,
@@ -58,7 +55,7 @@ public class CarRepositoryFake implements CarRepository {
             Year.of(baujahr)
         );
 
-        // 2. Erstellung des Customer (Ziel der 1:1 Beziehung von Rental)
+
         final Customer customer = new Customer(
             customerId,
             kundenVorname,
@@ -67,8 +64,7 @@ public class CarRepositoryFake implements CarRepository {
             LocalDate.of(1990, 1, 1)
         );
 
-        // 3. Erstellung des Rental-Vorgangs (N-Seite der 1:N Beziehung zu Car)
-        // Rental besitzt die gerichteten 1:1 und N:1-Beziehungen (Customer und CarId).
+
         final Rental rental = new Rental(
             rentalId,
             LocalDate.now().minusDays(10),
@@ -78,8 +74,7 @@ public class CarRepositoryFake implements CarRepository {
             carId     // N:1 Beziehung (Fremdschlüssel zum Car)
         );
 
-        // 4. Erstellung des Car-Objekts (1-Seite der 1:N Beziehung)
-        // Car referenziert Rental über eine Liste.
+
         return new Car(
             carId,
             hersteller,

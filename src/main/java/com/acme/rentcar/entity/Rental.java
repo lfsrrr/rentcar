@@ -4,26 +4,20 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-// Diese Klasse repräsentiert einen einzelnen Mietvorgang (N-Seite der 1:N-Beziehung zu Car)
+
 public class Rental {
 
     private UUID id;
-    private LocalDate mietbeginn; // Startdatum
-    private LocalDate mietende;   // Enddatum
-    private double gesamtpreis; // Mietpreis
-
-    // 1:1 Beziehung zu Customer (Jeder Mietvertrag hat einen verantwortlichen Kunden)
+    private LocalDate mietbeginn;
+    private LocalDate mietende;
+    private double gesamtpreis;
     private Customer customer;
+    private UUID carId;
 
-    // 1:N Beziehung zu Car (Das Car-Objekt enthält eine Liste dieser Rentals)
-    private UUID carId; // Fremdschlüssel zur Car-Entity
-
-    // Optional: Leerer Konstruktor für JPA/Hibernate
     public Rental() {
-        // Leerer Konstruktor
+
     }
 
-    // Voller Konstruktor
     public Rental(final UUID id, final LocalDate mietbeginn, final LocalDate mietende,
                   final double gesamtpreis, final Customer customer, final UUID carId) {
         this.id = id;
@@ -34,7 +28,6 @@ public class Rental {
         this.carId = carId;
     }
 
-    // --- Core Java Methoden ---
 
     @Override
     public boolean equals(final Object other) {

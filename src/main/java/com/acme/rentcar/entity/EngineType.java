@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.stream.Stream;
 
-/**
- * Definiert die möglichen Motortypen für ein Auto.
- * Enthält Logik zur Deserialisierung von JSON-Werten.
- */
+
 public enum EngineType {
 
     BENZIN("B"), // Benzin
