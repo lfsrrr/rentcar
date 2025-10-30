@@ -5,29 +5,27 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-// Annahmen für die Beziehungen (1:N):
-// Ein Car kann viele Rental-Vorgänge (Mietvorgänge) haben.
-// Ein Car hat eine CarDetails-Entität (1:1).
+
 
 public class Car {
     private UUID id;
-    private String hersteller; // Hersteller
-    private String modell;     // Modell
-    private LocalDate erstzulassung; // Entspricht Geburtsdatum
-    private String kennzeichen;  // Kennzeichen
+    private String hersteller;
+    private String modell;
+    private LocalDate erstzulassung;
+    private String kennzeichen;
 
-    // 1:1 Beziehung (Unidirektional: Car kennt Details)
+
     private CarDetails details;
 
-    // 1:N Beziehung (Unidirektional: Car kennt seine Mieten)
+
     private List<Rental> rentals;
 
-    // Optional: Leerer Konstruktor für JPA/Hibernate (kann später nötig sein)
+
     public Car() {
-        // Leerer Konstruktor
+
     }
 
-    // Voller Konstruktor (entspricht der Struktur des Patient-Beispiels)
+
     public Car(final UUID id, final String hersteller, final String modell, final LocalDate erstzulassung,
                final String kennzeichen, final CarDetails details, final List<Rental> rentals) {
         this.id = id;
@@ -39,7 +37,6 @@ public class Car {
         this.rentals = rentals;
     }
 
-    // --- Core Java Methoden (Equals, HashCode, ToString) ---
 
     @Override
     public boolean equals(final Object other) {
