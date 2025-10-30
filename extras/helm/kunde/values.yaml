@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Default values for kunde.
+# Default values for rentcar.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -46,14 +46,14 @@ rollingUpdate:
   # -- nicht-verfügbare Pods bei "Rolling Update"
   maxUnavailable: 1
 
-# -- max. Wartezeit in Sekunden, bis "failed progressing" eintritt
+# -- max. Wartezeit in Serentcarn, bis "failed progressing" eintritt
 progressDeadlineSeconds: 10
 
 image:
   # -- Repository als Präfix beim Image-Namen
   repository: juergenzimmermann
   # -- Name des Image
-  name: kunde
+  name: rentcar
   # -- Pull-Policy für das Image
   pullPolicy: Always
   # -- Defaultwert ist im Chart bei `appVersion` und kann überschrieben werden.
@@ -85,21 +85,21 @@ resourcesLimits:
   ephemeral: 64Mi
 
 livenessProbe:
-  # -- Anzahl Sekunden, bis die Probe für Liveness abgesetzt wird
+  # -- Anzahl Serentcarn, bis die Probe für Liveness abgesetzt wird
   initialDelay: 0
-  # -- Timeout für Liveness-Probe in Sekunden
+  # -- Timeout für Liveness-Probe in Serentcarn
   timeout: 1
-  # -- periodischer Abstand zwischen den Liveness-Proben in Sekunden
+  # -- periodischer Abstand zwischen den Liveness-Proben in Serentcarn
   period: 10
   # -- Max. Anzahl an Fehlversuchen bei den Liveness-Proben
   failureThreshold: 3
 
 readinessProbe:
-  # -- Anzahl Sekunden, bis die Probe für Readiness abgesetzt wird
+  # -- Anzahl Serentcarn, bis die Probe für Readiness abgesetzt wird
   initialDelay: 0
-  # -- Timeout für Readiness-Probe in Sekunden
+  # -- Timeout für Readiness-Probe in Serentcarn
   timeout: 1
-  # -- periodischer Abstand zwischen den Readiness-Proben in Sekunden
+  # -- periodischer Abstand zwischen den Readiness-Proben in Serentcarn
   period: 10
   # -- Max. Anzahl an Fehlversuchen bei den Readiness-Proben
   failureThreshold: 3

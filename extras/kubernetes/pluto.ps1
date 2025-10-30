@@ -28,7 +28,7 @@ if ($versionMinimum -gt $versionCurrent) {
 # Titel setzen
 $host.ui.RawUI.WindowTitle = 'pluto'
 
-$release = 'kunde'
+$release = 'rentcar'
 Set-Location .\$release
 helm template $release . -f values.yaml -f dev.yaml > ${env:TEMP}\$release.yaml
 C:\Zimmermann\pluto\pluto.exe detect ${env:TEMP}\$release.yaml

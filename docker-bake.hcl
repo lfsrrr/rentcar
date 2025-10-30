@@ -27,22 +27,22 @@ group "default" {
 }
 
 target "noble" {
-  tags = ["docker.io/juergenzimmermann/kunde:2025.10.1-eclipse-noble"]
+  tags = ["docker.io/juergenzimmermann/rentcar:2025.10.1-eclipse-noble"]
   # dockerfile = "Dockerfile"
   # context = "."
 }
 
 target "alpine" {
-  tags = ["docker.io/juergenzimmermann/kunde:2025.10.1-eclipse-alpine"]
+  tags = ["docker.io/juergenzimmermann/rentcar:2025.10.1-eclipse-alpine"]
   dockerfile = "Dockerfile.alpine"
 }
 
 target "azul" {
-  tags = ["docker.io/juergenzimmermann/kunde:2025.10.1-azul"]
+  tags = ["docker.io/juergenzimmermann/rentcar:2025.10.1-azul"]
   dockerfile = "Dockerfile.azul"
 }
 
 target "sap" {
-  tags = ["docker.io/juergenzimmermann/kunde:2025.10.1-sap"]
+  tags = ["docker.io/juergenzimmermann/rentcar:2025.10.1-sap"]
   dockerfile = "Dockerfile.sap"
 }

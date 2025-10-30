@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # kubectl apply -f busybox.yaml
-#   nslookup kunde.acme.svc.cluster.local
+#   nslookup rentcar.acme.svc.cluster.local
 #   nslookup postgres.acme.svc.cluster.local
 # kubectl delete -f busybox.yaml
 

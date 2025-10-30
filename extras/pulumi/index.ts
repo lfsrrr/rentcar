@@ -22,13 +22,13 @@ import { resolve } from 'node:path';
 
 // ============================================================================
 
-const chartName = 'kunde';
+const chartName = 'rentcar';
 // https://nodejs.org/api/path.html
-const chart = resolve('..', 'helm', 'kunde');
+const chart = resolve('..', 'helm', 'rentcar');
 const version = '2025.10.1';
 const config = new Config();
 const namespace = config.get('k8sNamespace') || 'default';
-const devYamlFile = resolve('dev', 'kunde.yaml');
+const devYamlFile = resolve('dev', 'rentcar.yaml');
 const provider = new Provider('docker-desktop', {
     // https://nodejs.org/api/fs.html#fspromisesreadfilepath-options
     // "await" wie in C#

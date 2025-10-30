@@ -28,7 +28,7 @@ if ($versionMinimum -gt $versionCurrent) {
 # Titel setzen
 $host.ui.RawUI.WindowTitle = 'kubescape'
 
-$release = 'kunde'
+$release = 'rentcar'
 Set-Location .\$release
 helm template $release . -f values.yaml -f dev.yaml > ${env:TEMP}\$release.yaml
 C:\Zimmermann\kubescape\kubescape.exe scan --verbose ${env:TEMP}\$release.yaml

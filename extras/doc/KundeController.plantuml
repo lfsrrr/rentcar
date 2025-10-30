@@ -12,7 +12,7 @@
 '
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@startuml KundeController
+@startuml rentcarController
 
 skinparam classAttributeIconSize 0
 
@@ -39,45 +39,45 @@ package java.util {
     class UUID
 }
 
-package com.acme.kunde {
+package com.acme.rentcar {
     package entity {
-        class Kunde
+        class rentcar
     }
     package service {
-        class KundeService << control >> << @Service >>
+        class rentcarService << control >> << @Service >>
 
         ' TODO Gradle: "exception" wird erst AsciiDoctor_plugin 5.x unterstuetzt
         exception NotFoundException
 
-        KundeService .right[hidden].> Kunde
+        rentcarService .right[hidden].> rentcar
     }
 
     package rest #DDDDDD {
-        class KundeController << boundary >> << @RestController >> << @RequestMapping >> {
-            ~ @GetMapping getById(@PathVariable id: UUID): Kunde
-            ~ @GetMapping get(@RequestParam queryParams: MultiValueMap<String, String>): Collection<Kunde>
+        class rentcarController << boundary >> << @RestController >> << @RequestMapping >> {
+            ~ @GetMapping getById(@PathVariable id: UUID): rentcar
+            ~ @GetMapping get(@RequestParam queryParams: MultiValueMap<String, String>): Collection<rentcar>
         }
 
         class GlobalExceptionHandler << @ControllerAdvice >> {
             ~ @ExceptionHandler @ResponseStatus onNotFound(ex: NotFoundException)
         }
 
-        KundeController o--> "1" KundeService : service
+        rentcarController o--> "1" rentcarService : service
 
-        KundeController .up.> RestController
-        KundeController .up.> RequestMapping
-        KundeController .up.> PathVariable
-        KundeController .up.> RequestParam
-        KundeController .up.> ResponseEntity
-        KundeController .up.> MultiValueMap
-        KundeController .down.> Kunde
+        rentcarController .up.> RestController
+        rentcarController .up.> RequestMapping
+        rentcarController .up.> PathVariable
+        rentcarController .up.> RequestParam
+        rentcarController .up.> ResponseEntity
+        rentcarController .up.> MultiValueMap
+        rentcarController .down.> rentcar
 
         GlobalExceptionHandler .up.> ExceptionHandler
         GlobalExceptionHandler .up.> ResponseStatus
         GlobalExceptionHandler ..> NotFoundException
 
-        KundeController .right.> UUID
-        KundeController ..> Collection
+        rentcarController .right.> UUID
+        rentcarController ..> Collection
     }
 }
 

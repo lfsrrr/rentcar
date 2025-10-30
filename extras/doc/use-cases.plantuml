@@ -17,16 +17,16 @@
 left to right direction
 
 actor Gast
-actor Kunde
+actor rentcar
 actor Admin
 
-rectangle kunde {
+rectangle rentcar {
     Gast --> (registrieren)
-    Kunde --> (Kunde suchen)
-    Kunde --> (Kunde ändern)
-    Admin --> (Kunde suchen)
-    Admin --> (Kunde ändern)
-    Admin --> (Kunde löschen)
+    rentcar --> (rentcar suchen)
+    rentcar --> (rentcar ändern)
+    Admin --> (rentcar suchen)
+    Admin --> (rentcar ändern)
+    Admin --> (rentcar löschen)
 }
 
 footer (c) Jürgen Zimmermann

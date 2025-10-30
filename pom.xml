@@ -33,10 +33,10 @@
 
     2) Microservice als selbstausfuehrendes JAR oder Docker-Image erstellen und ausfuehren
         .\mvnw package spring-boot:repackage -D'maven.test.skip=true' -D'spring-boot.build-image.skip=true'
-            -> ${project.build.directory}/kunde-...jar-> target/kunde-...jar
+            -> ${project.build.directory}/rentcar-...jar-> target/rentcar-...jar
             https://docs.spring.io/spring-boot/maven-plugin/packaging.html#packaging.repackage-goal
 
-            java -\-enable-preview -jar .\target\kunde-...jar `
+            java -\-enable-preview -jar .\target\rentcar-...jar `
                 -\-spring.profiles.active=dev `
                 -\-spring.ssl.bundle.pem.microservice.keystore.private-key=src/main/resources/private-key.pem `
                 -\-spring.ssl.bundle.pem.microservice.keystore.certificate=src/main/resources/certificate.crt `
@@ -50,7 +50,7 @@
     3) Tests
         .\mvnw test jacoco:report
             ${project.build.directory}/site/jacoco/*.html
-        .\mvnw test -Dtest=KundeGetRestTest
+        .\mvnw test -Dtest=rentcarGetRestTest
         .\mvnw test -P !jacoco -D'maven.build.cache.enabled=false'
 
     4) Codeanalyse: Checkstyle, SpotBugs, Spotless, Modernizer, SonarQube
@@ -139,14 +139,14 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:https://github.com/acme/kunde.git</connection>
-        <developerConnection>scm:git:https://github.com/acme/kunde.git</developerConnection>
-        <url>https://github.com/acme/kunde</url>
+        <connection>scm:git:https://github.com/acme/rentcar.git</connection>
+        <developerConnection>scm:git:https://github.com/acme/rentcar.git</developerConnection>
+        <url>https://github.com/acme/rentcar</url>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/acme/kunde/issues</url>
+        <url>https://github.com/acme/rentcar/issues</url>
     </issueManagement>
     <developers>
         <developer>
@@ -850,7 +850,7 @@
                         <!-- siehe ${project.build.directory}/generated-sources/annotations -->
                         <!-- https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#tooling-modelgen -->
                         <!-- https://docs.jboss.org/hibernate/orm/current/introduction/html_single/Hibernate_Introduction.html#generator -->
-                        <!-- build\generated\sources\annotationProcessor\java\main\com.acme.kunde\entity\Kunde_.java -->
+                        <!-- build\generated\sources\annotationProcessor\java\main\com.acme.rentcar\entity\rentcar_.java -->
                         <path>
                             <groupId>org.hibernate.orm</groupId>
                             <artifactId>hibernate-processor</artifactId>

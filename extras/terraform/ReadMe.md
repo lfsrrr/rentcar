@@ -5,7 +5,7 @@
 - Der Namespace `acme` in Kubernetes ist gemäß der allgemeinen Installationsanleitung
   eingerichtet.
 - _Terraform_ ist installiert und über die Umgebungsvariable `PATH` auch aufrufbar
-- In `extras/helm/kunde/templates/deployment.yaml` müssen die Pfade bei `spec.template.spec.volumes[].hostpath`
+- In `extras/helm/rentcar/templates/deployment.yaml` müssen die Pfade bei `spec.template.spec.volumes[].hostpath`
   angepasst werden
 
 Ob die Voraussetzungen erfüllt sind kann man beispielsweise folgendermaßen überprüfen:
@@ -24,7 +24,7 @@ Ob die Voraussetzungen erfüllt sind kann man beispielsweise folgendermaßen üb
 ## Bereitstellung mit Terraform
 
 ```powershell
-    cd extras\terraform\kunde
+    cd extras\terraform\rentcar
 
     # einmalig und bei Updates von main.tf
     terraform init
@@ -40,7 +40,7 @@ Ob die Voraussetzungen erfüllt sind kann man beispielsweise folgendermaßen üb
     terraform destroy -auto-approve
 ```
 
-Bis der Endpoint für den Service "kunde" verfügbar ist, muss man ggf. ein
+Bis der Endpoint für den Service "rentcar" verfügbar ist, muss man ggf. ein
 bisschen warten. Aufgrund der Einstellungen für _Liveness_ und _Readiness_
 kann es einige Minuten dauern, bis in der PowerShell angezeigt wird, dass die
 Installation erfolgreich war. Mit _Lens_ kann man jedoch die Log-Einträge
@@ -53,11 +53,11 @@ gestarteten (Kubernetes-) Pods.
 Um beim Entwickeln von localhost (und damit von außen) auf einen
 Kubernetes-Service zuzugreifen, ist _Port-Forwarding_ die einfachste
 Möglichkeit, indem das nachfolgende Kommando für den installierten Service mit
-Name _kunde_ aufgerufen wird. Alternativ kann auch das Skript `port-forward.ps1`
+Name _rentcar_ aufgerufen wird. Alternativ kann auch das Skript `port-forward.ps1`
 (s.o.) aufgerufen werden.
 
 ```powershell
-    kubectl port-forward svc/kunde 8443 -n acme
+    kubectl port-forward svc/rentcar 8443 -n acme
 ```
 
 ## Requests nach erfolgreicher Bereitstellung im Kubernetes-Cluster
@@ -95,7 +95,7 @@ gemäß der Datei `.terraform-docs.yml` generieren lassen:
 
 ## ClusterIP statt Port-Forwarding
 
-Statt Port-Forwarding kann man auch in `extras\helm\kunde\templates` in
+Statt Port-Forwarding kann man auch in `extras\helm\rentcar\templates` in
 der Datei `service.yaml` beim Schlüssel `spec.type` den Wert `LoadBalancer`eintragen
 und damit den Defaultwert `ClusterIP` überschreiben. Dadurch öffnet man allerdings
 den Service für Zugriffe von außerhalb des Clusters, was eigentlich einem Gateway

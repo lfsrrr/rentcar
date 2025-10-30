@@ -34,13 +34,13 @@ IMPORTANT: Copyright (C) 2015 - present Jürgen Zimmermann, Hochschule Karlsruhe
            GNU General Public License (GPL) v3. +
            For the full text of the license, see the http://www.gnu.org/licenses/gpl-3.0.html[license] file.
 
-== Der Microservice Kunde
+== Der Microservice rentcar
 
 === Der Microservice im Überblick
 
 bla bla
 
-.Use Cases für den Microservice "kunde"
+.Use Cases für den Microservice "rentcar"
 [plantuml,use-cases,svg]
 ----
 include::./use-cases.plantuml[]
@@ -48,7 +48,7 @@ include::./use-cases.plantuml[]
 
 bla bla
 
-.Komponenten des Microservice "kunde"
+.Komponenten des Microservice "rentcar"
 [plantuml,komponenten,svg]
 ----
 include::./komponenten.plantuml[]
@@ -58,10 +58,10 @@ include::./komponenten.plantuml[]
 
 bla bla
 
-."KundeController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,KundeController,svg]
+."rentcarController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,rentcarController,svg]
 ----
-include::./KundeController.plantuml[]
+include::./rentcarController.plantuml[]
 ----
 
 ."Sequenzdiagramm" mit den Methodenaufrufen
@@ -70,38 +70,38 @@ include::./KundeController.plantuml[]
 include::sequenzdiagramm.plantuml[]
 ----
 
-."KundeWriteController" für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,KundeWriteController,svg]
+."rentcarWriteController" für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,rentcarWriteController,svg]
 ----
-include::./KundeWriteController.plantuml[]
+include::./rentcarWriteController.plantuml[]
 ----
 
 === Die Geschäftslogik
 
 bla bla
 
-.Die Service-Klasse "KundeService" für die Geschäftslogik
-[plantuml,KundeService,svg]
+.Die Service-Klasse "rentcarService" für die Geschäftslogik
+[plantuml,rentcarService,svg]
 ----
-include::./KundeService.plantuml[]
+include::./rentcarService.plantuml[]
 ----
 
 bla bla
 
-.Die Service-Klasse "KundeWriteService" für die Geschäftslogik
-[plantuml,KundeWriteService,svg]
+.Die Service-Klasse "rentcarWriteService" für die Geschäftslogik
+[plantuml,rentcarWriteService,svg]
 ----
-include::./KundeWriteService.plantuml[]
+include::./rentcarWriteService.plantuml[]
 ----
 
 === Die Entity-Klassen
 
 bla bla
 
-.Die Entity-Klasse "Kunde" für Kundendaten
-[plantuml,Kunde,svg]
+.Die Entity-Klasse "rentcar" für rentcarndaten
+[plantuml,rentcar,svg]
 ----
-include::./Kunde.plantuml[]
+include::./rentcar.plantuml[]
 ----
 
 == Programmierrichtlinien

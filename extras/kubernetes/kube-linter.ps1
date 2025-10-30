@@ -28,4 +28,4 @@ if ($versionMinimum -gt $versionCurrent) {
 # Titel setzen
 $host.ui.RawUI.WindowTitle = 'kube-linter'
 
-C:\Zimmermann\kube-linter\kube-linter.exe lint kunde
+C:\Zimmermann\kube-linter\kube-linter.exe lint rentcar

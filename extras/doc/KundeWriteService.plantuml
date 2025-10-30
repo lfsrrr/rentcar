@@ -12,7 +12,7 @@
 '
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@startuml KundeWriteService
+@startuml rentcarWriteService
 
 skinparam classAttributeIconSize 0
 
@@ -24,32 +24,32 @@ package java.util {
     class UUID
 }
 
-package com.acme.kunde {
+package com.acme.rentcar {
     package entity {
-        class Kunde << entity >>
+        class rentcar << entity >>
     }
 
     package repository {
-        class KundeRepository << control >> << @Repository >>
+        class rentcarRepository << control >> << @Repository >>
     }
 
     package service #DDDDDD {
         ' TODO Gradle: "exception" wird erst AsciiDoctor_plugin 5.x unterstuetzt
         exception EmailExistsException
 
-        class KundeWriteService << control >> << @Service >> {
-            + create(kunde: Kunde): Kunde
-            + update(kunde: Kunde, id: UUID)
+        class rentcarWriteService << control >> << @Service >> {
+            + create(rentcar: rentcar): rentcar
+            + update(rentcar: rentcar, id: UUID)
             + deleteById(id: UUID)
         }
 
-        KundeWriteService o--> "1" KundeRepository : repo
+        rentcarWriteService o--> "1" rentcarRepository : repo
 
-        KundeWriteService .right.> Kunde
-        KundeWriteService .up.> Service
-        KundeWriteService .up.> UUID
+        rentcarWriteService .right.> rentcar
+        rentcarWriteService .up.> Service
+        rentcarWriteService .up.> UUID
 
-        KundeWriteService ..> EmailExistsException
+        rentcarWriteService ..> EmailExistsException
     }
 }
 

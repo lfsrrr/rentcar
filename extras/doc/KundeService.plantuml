@@ -12,7 +12,7 @@
 '
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@startuml KundeService
+@startuml rentcarService
 
 skinparam classAttributeIconSize 0
 
@@ -28,35 +28,35 @@ package java.util {
     UUID .left[hidden].> Service
 }
 
-package com.acme.kunde {
+package com.acme.rentcar {
     package entity {
-        class Kunde << entity >>
+        class rentcar << entity >>
 
-        Kunde .up[hidden].> List
+        rentcar .up[hidden].> List
     }
 
     package repository {
-        class KundeRepository << control >> << @Repository >>
+        class rentcarRepository << control >> << @Repository >>
     }
 
     package service #DDDDDD {
         ' TODO Gradle: "exception" wird erst AsciiDoctor_plugin 5.x unterstuetzt
         exception NotFoundException
 
-        class KundeService << control >> << @Service >> {
-            + findById(id: UUID): Kunde
-            + find(queryParams: Map<String, String>): List<Kunde>
+        class rentcarService << control >> << @Service >> {
+            + findById(id: UUID): rentcar
+            + find(queryParams: Map<String, String>): List<rentcar>
         }
 
-        KundeService o--> KundeRepository : repo
+        rentcarService o--> rentcarRepository : repo
 
-        KundeService .right.> Kunde
-        KundeService ..> Service
-        KundeService .up.> UUID
-        KundeService .up> List
-        KundeService .up.> Map
+        rentcarService .right.> rentcar
+        rentcarService ..> Service
+        rentcarService .up.> UUID
+        rentcarService .up> List
+        rentcarService .up.> Map
 
-        KundeService ..> NotFoundException
+        rentcarService ..> NotFoundException
     }
 }
 

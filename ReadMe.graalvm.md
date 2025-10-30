@@ -43,5 +43,5 @@ was bei 64 GB RAM und 16 Prozessoren ca. 3 Minuten dauert:
     cp src\main\resources\private-key.pem build\native\nativeCompile
 
     cd build\native\nativeCompile
-    .\kunde.exe --spring.profiles.active=dev,native
+    .\rentcar.exe --spring.profiles.active=dev,native
 ```

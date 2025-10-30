@@ -16,25 +16,25 @@
 
 left to right direction
 
-package com.acme.kunde #DDDDDD {
+package com.acme.rentcar #DDDDDD {
     package rest <<boundary>> #FFFFFF {
-        [@RestController\nKundeController] as KundeController
+        [@RestController\nrentcarController] as rentcarController
     }
 
     package service <<control>> #FFFFFF {
-        [@Service\nKundeService] as KundeService
+        [@Service\nrentcarService] as rentcarService
     }
 
     package entity <<entity>> #FFFFFF {
-        [Kunde]
+        [rentcar]
     }
 }
 
-RESTClient ~~> [KundeController]
+RESTClient ~~> [rentcarController]
 
-[KundeController] o--> [KundeService]
-[KundeController] .up.> [Kunde]
-[KundeService] ..> [Kunde]
+[rentcarController] o--> [rentcarService]
+[rentcarController] .up.> [rentcar]
+[rentcarService] ..> [rentcar]
 
 footer (c) Jürgen Zimmermann
 

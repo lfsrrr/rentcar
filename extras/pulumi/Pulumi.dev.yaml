@@ -1,2 +1,2 @@
 config:
-  kunde:k8sNamespace: acme
+  rentcar:k8sNamespace: acme

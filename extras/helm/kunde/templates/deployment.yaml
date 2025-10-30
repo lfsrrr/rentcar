@@ -19,7 +19,7 @@ apiVersion: apps/v1
 # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#deployment-v1-apps
 kind: Deployment
 metadata:
-  name: {{ include "kunde.fullname" . }}
+  name: {{ include "rentcar.fullname" . }}
   namespace: {{ .Values.namespace }}
   # Kennzeichen bzw. Markierung
   # https://kubernetes.io/docs/concepts/overview/working-with-objects/labels
@@ -28,15 +28,15 @@ metadata:
   labels:
     # https://helm.sh/docs/chart_template_guide/function_list
     # nindent rueckt um eine bestimmte Anzahl ("n") Zeichen ein
-    {{- include "kunde.labels" . | nindent 4 }}
+    {{- include "rentcar.labels" . | nindent 4 }}
 spec:
   # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#selector
   selector:
     # Labels, mit denen z.B. ein Service einen Pod (zu diesem Deployment) identifizieren kann
-    # z.B. fuer:   kubectl delete deployment --selector app=kunde,version=2.0.0 --namespace acme
+    # z.B. fuer:   kubectl delete deployment --selector app=rentcar,version=2.0.0 --namespace acme
     # i.a. gleicher Wert wie in template.metadata.labels
     matchLabels:
-      {{- include "kunde.selectorLabels" . | nindent 6 }}
+      {{- include "rentcar.selectorLabels" . | nindent 6 }}
   # Anzahl laufender Pods fuer das Template zu diesem Deployment (s.u.) -> ReplicaSet
   replicas: {{ .Values.replicaCount }}
   #strategy:
@@ -49,7 +49,7 @@ spec:
   #    # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#max-unavailable
   #    # unavailable during the update process
   #    maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-  # max. Wartezeit in Sekunden, bis "failed progressing" eintritt
+  # max. Wartezeit in Serentcarn, bis "failed progressing" eintritt
   # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#progress-deadline-seconds
   progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
   # https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates
@@ -58,7 +58,7 @@ spec:
     metadata:
       # Labels fuer einen Pod (NICHT fuer dieses Deployment), der durch dieses Deployment installiert wurde
       labels:
-        {{- include "kunde.labels" . | nindent 8 }}
+        {{- include "rentcar.labels" . | nindent 8 }}
     # Spezifikation fuer jeden Pod
     spec:
       containers:
@@ -72,7 +72,7 @@ spec:
           envFrom:
             # https://kubernetes.io/docs/concepts/configuration/configmap
             - configMapRef:
-                name: {{ include "kunde.fullname" . }}
+                name: {{ include "rentcar.fullname" . }}
           ports:
             - containerPort: {{ .Values.deployment.containerPort }}
               name: https
@@ -130,7 +130,7 @@ spec:
               path: /actuator/health/liveness
               port: 8080
               scheme: HTTP
-            # Anzahl Sekunden, bis die Probe fuer Liveness abgesetzt wird
+            # Anzahl Serentcarn, bis die Probe fuer Liveness abgesetzt wird
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelay }}
             # default: 1 Sek.
             timeoutSeconds: {{ .Values.livenessProbe.timeout }}
@@ -145,7 +145,7 @@ spec:
               path: /actuator/health/readiness
               port: 8080
               scheme: HTTP
-            # Anzahl Sekunden, bis die Probe fuer Readiness abgesetzt wird
+            # Anzahl Serentcarn, bis die Probe fuer Readiness abgesetzt wird
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelay }}
             # default: 1 Sek.
             timeoutSeconds: {{ .Values.readinessProbe.timeout }}
@@ -155,36 +155,36 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           volumeMounts:
             - mountPath: /tmp
-              name: log-{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+              name: log-{{ include "rentcar.name" . }}{{ .Values.versionSuffix }}
             - mountPath: /workspace/BOOT-INF/classes/private-key.pem
               # Dockerfile statt Buildpacks fuer Image:
               #mountPath: /workspace/private-key.pem
-              name: private-key-{{ include "kunde.name" . }}
+              name: private-key-{{ include "rentcar.name" . }}
               readOnly: true
             - mountPath: /workspace/BOOT-INF/classes/certificate.crt
               # Dockerfile statt Buildpacks fuer Image:
               #mountPath: /workspace/certificate.crt
-              name: certificate-{{ include "kunde.name" . }}
+              name: certificate-{{ include "rentcar.name" . }}
               readOnly: true
       priorityClassName: medium-priority
       volumes:
-        - name: log-{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+        - name: log-{{ include "rentcar.name" . }}{{ .Values.versionSuffix }}
           # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: /run/desktop/mnt/host/c/Zimmermann/volumes/{{ include "kunde.name" . }}{{ .Values.versionSuffix }}
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/{{ include "rentcar.name" . }}{{ .Values.versionSuffix }}
             type: Directory
           # https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
           #emptyDir: {}
-        - name: private-key-{{ include "kunde.name" . }}
+        - name: private-key-{{ include "rentcar.name" . }}
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: /run/desktop/mnt/host/c/Users/j/IdeaProjects/kunde{{ .Values.versionSuffix }}/kunde/src/main/resources/private-key.pem
+            path: /run/desktop/mnt/host/c/Users/j/IdeaProjects/rentcar{{ .Values.versionSuffix }}/rentcar/src/main/resources/private-key.pem
             type: File
-        - name: certificate-{{ include "kunde.name" . }}
+        - name: certificate-{{ include "rentcar.name" . }}
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: /run/desktop/mnt/host/c/Users/j/IdeaProjects/kunde{{ .Values.versionSuffix }}/kunde/src/main/resources/certificate.crt
+            path: /run/desktop/mnt/host/c/Users/j/IdeaProjects/rentcar{{ .Values.versionSuffix }}/rentcar/src/main/resources/certificate.crt
             type: File
       # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints
       # https://polaris.docs.fairwinds.com/checks/reliability
@@ -192,5 +192,5 @@ spec:
         - maxSkew: 1
           topologyKey: "topology.kubernetes.io/zone"
           whenUnsatisfiable: ScheduleAnyway
-      serviceAccountName: {{ include "kunde.fullname" . }}
+      serviceAccountName: {{ include "rentcar.fullname" . }}
       automountServiceAccountToken: false

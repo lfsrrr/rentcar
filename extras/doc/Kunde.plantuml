@@ -12,7 +12,7 @@
 '
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@startuml Kunde
+@startuml rentcar
 
 skinparam classAttributeIconSize 0
 ' skinparam monochrome true
@@ -34,7 +34,7 @@ package java {
     }
 }
 
-package com.acme.kunde.entity #DDDDDD {
+package com.acme.rentcar.entity #DDDDDD {
     class Rechnung {
         betrag: BigDecimal
         waehrung: Currency
@@ -64,7 +64,7 @@ package com.acme.kunde.entity #DDDDDD {
         REISEN
     }
 
-    class Kunde << entity >> {
+    class rentcar << entity >> {
         id : UUID
         nachname : String
         email : String
@@ -77,16 +77,16 @@ package com.acme.kunde.entity #DDDDDD {
         interessen: List<InteresseType>
     }
 
-    Kunde *--> "0..*" Rechnung : rechnungen
-    Kunde *--> "1" Adresse : adresse
-    Kunde .up.> GeschlechtType
-    Kunde .up.> FamilienstandType
-    Kunde .up.> InteresseType
+    rentcar *--> "0..*" Rechnung : rechnungen
+    rentcar *--> "1" Adresse : adresse
+    rentcar .up.> GeschlechtType
+    rentcar .up.> FamilienstandType
+    rentcar .up.> InteresseType
 
-    Kunde ..> UUID
-    Kunde ..> LocalDate
-    Kunde ..> List
-    Kunde ..> URL
+    rentcar ..> UUID
+    rentcar ..> LocalDate
+    rentcar ..> List
+    rentcar ..> URL
 
     Rechnung ..> Currency
     Rechnung ..> BigDecimal

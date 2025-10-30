@@ -13,16 +13,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Metadaten generiert durch: helm create kunde
+# Metadaten generiert durch: helm create rentcar
 
-# Aufruf:   cd extras/helm/kunde
-#           helm install -f ..\..\terraform\dev\kunde.yaml kunde .
-#           helm uninstall kunde
+# Aufruf:   cd extras/helm/rentcar
+#           helm install -f ..\..\terraform\dev\rentcar.yaml rentcar .
+#           helm uninstall rentcar
 #           helm install --help
 
 apiVersion: v2
-name: kunde
-description: Helm Chart für kunde
+name: rentcar
+description: Helm Chart für rentcar
 
 # A chart can be either an 'application' or a 'library' chart.
 #

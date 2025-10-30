@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Aufruf:   docker build --tag juergenzimmermann/kunde:2025.10.1-azul -f Dockerfile.azul .
+# Aufruf:   docker build --tag juergenzimmermann/rentcar:2025.10.1-azul -f Dockerfile.azul .
 #               ggf. --progress=plain
 #               ggf. --no-cache
 #           Windows:   Get-Content Dockerfile.azul | docker run --rm --interactive hadolint/hadolint:v2.14.0-debian
@@ -99,8 +99,8 @@ FROM azul/zulu-openjdk:${JAVA_VERSION}-jre AS final
 # https://spdx.org/licenses
 # https://snyk.io/de/blog/how-and-when-to-use-docker-labels-oci-container-annotations
 # MAINTAINER ist deprecated https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
-LABEL org.opencontainers.image.title="kunde" \
-      org.opencontainers.image.description="Microservice kunde v1 mit Basis-Image Azul Zulu und Ubuntu Jammy" \
+LABEL org.opencontainers.image.title="rentcar" \
+      org.opencontainers.image.description="Microservice rentcar v1 mit Basis-Image Azul Zulu und Ubuntu Jammy" \
       org.opencontainers.image.version="2025.10.1-azul" \
       org.opencontainers.image.licenses="GPL-3.0-or-later" \
       org.opencontainers.image.vendor="Juergen Zimmermann" \
@@ -142,4 +142,4 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=1 \
     CMD wget -qO- --no-check-certificate https://localhost:8443/actuator/health/ | grep UP || exit 1
 
 # Bei CMD statt ENTRYPOINT kann das Kommando bei "docker run ..." ueberschrieben werden
-ENTRYPOINT ["java", "--enable-preview", "-classpath", "application.jar:lib/*:.", "com.acme.kunde.Application"]
+ENTRYPOINT ["java", "--enable-preview", "-classpath", "application.jar:lib/*:.", "com.acme.rentcar.Application"]

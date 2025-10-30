@@ -14,3 +14,4 @@ extras/kubernetes/postgres/.kpt-pipeline
 # Sensible Daten
 extras/compose/db/postgres/db_password.txt
 src/main/resources/private-key.pem
+/C:/Zimmermann/dependency-check-data/odc.mv.db

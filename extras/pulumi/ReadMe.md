@@ -7,7 +7,7 @@
 - _Pulumi_ ist installiert und über die Umgebungsvariable `PATH` auch aufrufbar
 - Installation von _Node_, z.B. bei Windows in `C:\Zimmermann\node`
 - Umgebungsvariable `PATH` enthält den Pfad zur Node-Installation
-- In `extras/helm/kunde/templates/deployment.yaml` müssen die Pfade bei `spec.template.spec.volumes[].hostpath`
+- In `extras/helm/rentcar/templates/deployment.yaml` müssen die Pfade bei `spec.template.spec.volumes[].hostpath`
   angepasst werden
 
 Ob die Voraussetzungen erfüllt sind, kann mit folgenden Kommandos überprüft werden:

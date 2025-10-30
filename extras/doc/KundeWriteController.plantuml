@@ -12,7 +12,7 @@
 '
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
-@startuml KundeWriteController
+@startuml rentcarWriteController
 
 skinparam classAttributeIconSize 0
 
@@ -64,9 +64,9 @@ package java.util {
     Collection .up[hidden].> HttpServletRequest
 }
 
-package com.acme.kunde {
+package com.acme.rentcar {
     package service {
-        class KundeWriteService << control >> << @Service >>
+        class rentcarWriteService << control >> << @Service >>
 
         exception EmailExistsException
     }
@@ -74,11 +74,11 @@ package com.acme.kunde {
     package rest #DDDDDD {
         ' TODO "record" statt "class" ab v1.2025.4 (Juni 2025)
         ' https://github.com/plantuml/plantuml/commit/b8bb8a72b77ff169807429f70043150d2e380a67
-        record KundeDTO <<entity>>
+        record rentcarDTO <<entity>>
 
-        class KundeWriteController << boundary >> << @Controller >> << @RequestMapping >> {
-            ~ @PostMapping post(@RequestBody KundeDTO: KundeDTO, request: HttpServletRequest): ResponseEntity<Void>
-            ~ @PutMapping put(@PathVariable id: UUID, @RequestBody KundeDTO: KundeDTO)
+        class rentcarWriteController << boundary >> << @Controller >> << @RequestMapping >> {
+            ~ @PostMapping post(@RequestBody rentcarDTO: rentcarDTO, request: HttpServletRequest): ResponseEntity<Void>
+            ~ @PutMapping put(@PathVariable id: UUID, @RequestBody rentcarDTO: rentcarDTO)
             ~ @DeleteMapping deleteById(@PathVariable id: UUID)
 
             ~ @ExceptionHandler onConstraintViolations(ex: MethodArgumentNotValidException): ErrorResponse
@@ -86,26 +86,26 @@ package com.acme.kunde {
             ~ @ExceptionHandler onMessageNotReadable(ex: HttpMessageNotReadableException): ErrorResponse
         }
 
-        KundeWriteController o-down-> "1" KundeWriteService : service
-        KundeWriteController ..> KundeDTO
-        KundeWriteController ..> EmailExistsException
+        rentcarWriteController o-down-> "1" rentcarWriteService : service
+        rentcarWriteController ..> rentcarDTO
+        rentcarWriteController ..> EmailExistsException
 
-        KundeWriteController .up.> ResponseEntity
-        KundeWriteController .up.> ErrorResponse
-        KundeWriteController .up.> HttpMessageNotReadableException
-        KundeWriteController .left.> HttpServletRequest
+        rentcarWriteController .up.> ResponseEntity
+        rentcarWriteController .up.> ErrorResponse
+        rentcarWriteController .up.> HttpMessageNotReadableException
+        rentcarWriteController .left.> HttpServletRequest
 
-        KundeWriteController .up.> Controller
-        KundeWriteController .up.> RequestMapping
-        KundeWriteController .up.> PathVariable
-        KundeWriteController .up.> RequestBody
-        KundeWriteController .up.> ExceptionHandler
-        KundeWriteController .up.> MethodArgumentNotValidException
+        rentcarWriteController .up.> Controller
+        rentcarWriteController .up.> RequestMapping
+        rentcarWriteController .up.> PathVariable
+        rentcarWriteController .up.> RequestBody
+        rentcarWriteController .up.> ExceptionHandler
+        rentcarWriteController .up.> MethodArgumentNotValidException
 
-        KundeWriteController .right.> UUID
-        KundeWriteController .right.> Collection
+        rentcarWriteController .right.> UUID
+        rentcarWriteController .right.> Collection
 
-        KundeDTO .[hidden].> KundeWriteService
+        rentcarDTO .[hidden].> rentcarWriteService
     }
 }
 

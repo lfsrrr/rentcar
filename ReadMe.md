@@ -120,7 +120,7 @@ herunterladen und installieren. Die Installation erfolgt dabei im Verzeichnis
 - Den Menüpunkt _Workspaces_ anklicken
 - Im Drop-Down Menü den Button _Create Workspace_ anklicken
 - Danach den Button _Next_ anklicken
-- Im Eingabefeld _Name_ `kunde` und im Eingabefeld _Summary_ z.B.
+- Im Eingabefeld _Name_ `rentcar` und im Eingabefeld _Summary_ z.B.
   `REST- und GraphQL-Requests für den Appserver.`
 - Abschließend den Button _Create_ anklicken.
 
@@ -128,8 +128,8 @@ herunterladen und installieren. Die Installation erfolgt dabei im Verzeichnis
 
 Zunächst legt man ein _Environment_ mit Variablen an. Dazu wählt man am
 linken Rand den Menüpunkt _Environments_, klickt auf den Button `Import`
-und wählt aus dem Verzeichnis `.extras\postman` die Datei `kunde.postman_environment.json`
-aus. Jetzt hat man die Umgebung `kunde` mit der Variablen `base_url` und dem
+und wählt aus dem Verzeichnis `.extras\postman` die Datei `rentcar.postman_environment.json`
+aus. Jetzt hat man die Umgebung `rentcar` mit der Variablen `base_url` und dem
 Wert `https://localhost:8443` angelegt.
 
 ### Collections und Folders
@@ -189,7 +189,7 @@ durch einen Doppelklick auf _bootRun_ starten.
 Bei Maven: Am rechten Rand auf den Button _Maven_ klicken und innerhalb vom Projekt
 _Plugins_ > _spring-boot_ durch einen Doppelklick auf _spring-boot:run_ starten.
 
-Danach gibt es bei Gradle in der Titelleiste am oberen Rand den Eintrag _kunde [bootRun]_
+Danach gibt es bei Gradle in der Titelleiste am oberen Rand den Eintrag _rentcar [bootRun]_
 im Auswahlmenü und man kann von nun an den Server auch damit (neu-) starten,
 stoppen und ggf. debuggen.
 
@@ -323,11 +323,11 @@ Docker-Image mit folgendem Kommando erstellen.
 
 ```powershell
     # Eclipse Temurin mit Ubuntu Noble (2024.04) als Basis-Image
-    docker build --tag=juergenzimmermann/kunde:2025.10.1-eclipse-noble .
+    docker build --tag=juergenzimmermann/rentcar:2025.10.1-eclipse-noble .
     # Eclipse Temurin mit Alpine als Basis-Image
-    docker build --tag=juergenzimmermann/kunde:2025.10.1-eclipse-alpine --file=Dockerfile.alpine .
+    docker build --tag=juergenzimmermann/rentcar:2025.10.1-eclipse-alpine --file=Dockerfile.alpine .
     # Azul Zulu mit Ubuntu Jammy (2022.04) als Basis-Image
-    docker build --tag=juergenzimmermann/kunde:2025.10.1-azul  --file=Dockerfile.azul .
+    docker build --tag=juergenzimmermann/rentcar:2025.10.1-azul  --file=Dockerfile.azul .
 ```
 
 Wenn das Image gebaut wird, kann ggf. noch die Option `--no-cache` angegeben
@@ -413,7 +413,7 @@ Mit dem Unterkommando `inspect` von `docker` kann man die Metadaten, z.B. Labels
 Image inspizieren:
 
 ```shell
-    docker inspect juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+    docker inspect juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 #### docker sbom
@@ -422,7 +422,7 @@ Mit dem Unterkommando `sbom` (Software Bill of Materials) von `docker` kann man 
 welche Bestandteilen in einem Docker-Images enthalten sind, z.B. Java-Archive oder Debian-Packages.
 
 ```shell
-    docker sbom juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+    docker sbom juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 #### docker history
@@ -430,7 +430,7 @@ welche Bestandteilen in einem Docker-Images enthalten sind, z.B. Java-Archive od
 Mit dem Unterkommando `history` von `docker` kann man ein Docker-Image und die einzelnen Layer inspizieren, z.B.:
 
 ```shell
-    docker history juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+    docker history juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 #### Tool Window "Services" von IntelliJ IDEA
@@ -451,9 +451,9 @@ Bei Windows:
       --env TZ=Europe/Berlin `
       --env SPRING_PROFILES_ACTIVE=dev `
       --env APPLICATION_LOGLEVEL=trace `
-      --mount 'type=bind,source=C:\Zimmermann\volumes\kunde-v1,destination=/tmp' `
-      --memory 1024m --cpus 1 --hostname kunde `
-      --name kunde --rm juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+      --mount 'type=bind,source=C:\Zimmermann\volumes\rentcar-v1,destination=/tmp' `
+      --memory 1024m --cpus 1 --hostname rentcar `
+      --name rentcar --rm juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 Bei macOS (statt `/var/volumes` kann auch ein anderer sinnvoller Pfadverwendet werden):
@@ -463,17 +463,17 @@ Bei macOS (statt `/var/volumes` kann auch ein anderer sinnvoller Pfadverwendet w
       --env TZ=Europe/Berlin \
       --env SPRING_PROFILES_ACTIVE=dev \
       --env APPLICATION_LOGLEVEL=trace \
-      --mount 'type=bind,source=/var/volumes/kunde-v1,destination=/tmp' \
-      --memory 1024m --cpus 1 --hostname kunde \
-      --name kunde --rm juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+      --mount 'type=bind,source=/var/volumes/rentcar-v1,destination=/tmp' \
+      --memory 1024m --cpus 1 --hostname rentcar \
+      --name rentcar --rm juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 Jetzt läuft der Microservice als Docker-Container mit `HTTPS`, wobei auch der
-Container-interne Port 8443 des Microservice "kunde" als Port 8443 für
+Container-interne Port 8443 des Microservice "rentcar" als Port 8443 für
 localhost freigegeben wurde. Die Log-Datei `application.log` befindet sich im
 Container im Verzeichnis `/tmp`, das durch Mounting im
-Windows-Verzeichnis `C:\Zimmermann\volumes\kunde-v1` bzw. im macOS-Verzeichnis
-`/var/volumes/kunde-v1` zugreifbar ist.
+Windows-Verzeichnis `C:\Zimmermann\volumes\rentcar-v1` bzw. im macOS-Verzeichnis
+`/var/volumes/rentcar-v1` zugreifbar ist.
 
 Mit _Postman_ können nun HTTP-Requests (GET, POST, PUT, PATCH, DELETE) abgeschickt werden.
 
@@ -495,22 +495,22 @@ weiteren PowerShell herunterfahren:
 
 ```shell
     # Windows:
-    cd extras\compose\kunde
+    cd extras\compose\rentcar
 
     # macOS:
-    cd extras/compose/kunde
+    cd extras/compose/rentcar
 
-    # kunde mit z.B. Cloud-Native Buildpacks und Bellsoft Liberica (siehe compose.yml)
+    # rentcar mit z.B. Cloud-Native Buildpacks und Bellsoft Liberica (siehe compose.yml)
     docker compose up
 
     # Nur zur Fehlersuche: weitere (Power-) Shell für bash
     # Bei Buildpacks den Builder "paketobuildpacks/builder-jammy-base:latest" verwenden (s. gradle.properties)
     # Windows:
-    cd extras\compose\kunde
+    cd extras\compose\rentcar
     # macOS:
-    cd extras/compose/kunde
+    cd extras/compose/rentcar
 
-    docker compose exec kunde bash
+    docker compose exec rentcar bash
         id
         ps -ef
         env
@@ -530,9 +530,9 @@ Statt eine PowerShell zu verwenden, kann man Docker Compose auch direkt in
 IntelliJ aufrufen, indem man über das Kontextmenü ("rechte Maustaste") den
 Unterpunkt _Run 'compose/compose.yml...'_ für die Datei `compose.yml` auswählt.
 Im Tool-Window _Services_ sieht man dann unterhalb von _Docker_ den Eintrag
-_Docker-compose: compose_ mit dem Service _kunde_. Durch Anklicken von
-`compose-kunde-1` kann man _Log_ und _Dashboard_ (Environment Variables,
-Port, Volumes) inspizieren. Im Kontextmenü von `compose-kunde-1` gibt es u.a.
+_Docker-compose: compose_ mit dem Service _rentcar_. Durch Anklicken von
+`compose-rentcar-1` kann man _Log_ und _Dashboard_ (Environment Variables,
+Port, Volumes) inspizieren. Im Kontextmenü von `compose-rentcar-1` gibt es u.a.
 den Menüpunkt _Stop Container_, um den Container zu beenden.
 
 ### Image kopieren
@@ -541,14 +541,14 @@ Mit `docker save` kann man ein Docker Image im Format `tar` abspeichern und
 dann ggf. kopieren:
 
 ```shell
-    docker save juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft > kunde.tar
+    docker save juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft > rentcar.tar
 ```
 
 Mit `docker load` kann man anschließend ein Image aus dem Format `tar`
 wiederherstellen:
 
 ```shell
-    docker load < kunde.tar
+    docker load < rentcar.tar
 ```
 
 ---
@@ -558,7 +558,7 @@ wiederherstellen:
 ### WICHTIG: Schreibrechte für die Logdatei
 
 Wenn die Anwendung in Kubernetes läuft, ist die Log-Datei `application.log` im
-Verzeichnis `C:\Zimmermann\volumes\kunde-v1`. Das bedeutet auch zwangsläufig,
+Verzeichnis `C:\Zimmermann\volumes\rentcar-v1`. Das bedeutet auch zwangsläufig,
 dass diese Datei durch den _Linux-User_ vom (Kubernetes-) Pod angelegt und
 geschrieben wird, wozu die erforderlichen Berechtigungen in Windows gegeben
 sein müssen.
@@ -642,8 +642,8 @@ bzw. Konfigurationsdatei für _Configmap_, _Service_ und _Deployment_ ist
 Die Installation in Kubernetes erfolgt durch das nachfolgende Kommando, sodass
 der Microservice dann innerhalb von Kubernetes mit `HTTPS` läuft. Dabei wird
 die Logdatei im internen Verzeichnis `/var/log/spring` angelegt, welches durch
-_Mounting_ dem Windows-Verzeichnis `C:\Zimmermann\volumes\kunde-v1` bzw. dem
-macOS-Verzeichnis `/var/volumes/kunde-v1` entspricht und mit _Schreibberechtigung_
+_Mounting_ dem Windows-Verzeichnis `C:\Zimmermann\volumes\rentcar-v1` bzw. dem
+macOS-Verzeichnis `/var/volumes/rentcar-v1` entspricht und mit _Schreibberechtigung_
 existieren muss, z.B. bei Windows für die Benutzergruppen `Authentifizierte Benutzer`
 und `Benutzer`.
 
@@ -713,7 +713,7 @@ Bei macOS:
     ./mvnw spring-boot:build-image -D'maven.test.skip=true'
 ```
 
-Das _Helm-Chart_ heißt `kunde` und ist deshalb in einem gleichnamigen Verzeichnis,
+Das _Helm-Chart_ heißt `rentcar` und ist deshalb in einem gleichnamigen Verzeichnis,
 das zur besseren Strukturierung unterhalb von `extras\helm` ist. Die Metadaten sind
 in der Datei `Chart.yaml` und die einzelnen Manifest-Dateien sind im
 Unterverzeichis `templates` im Format YAML. In diesen Dateien gibt es Platzhalter
@@ -727,10 +727,10 @@ generieren.
 
 ```shell
     # Windows:
-    cd extras\helm\kunde
+    cd extras\helm\rentcar
 
     # macOS:
-    cd extras/helm/kunde
+    cd extras/helm/rentcar
 
     # Ueberprüfung des Helm-Charts
     helm lint --strict .
@@ -821,7 +821,7 @@ kann man das _Services Tool Window_ öffnen. Dort sieht man den Eintrag für
 _docker-desktop_ und kann über das Icon _Namespace_ am linken Rand vom
 Default-Namespace auf den Namespace "acme" umschalten. Danach kann man über
 die Unterpunkte _Workloads_ und _Pods_ zu einem laufenden Pod, z.B.
-`kunde-1234567890-12345`, navigieren und diesen mit der linken Maustaste
+`rentcar-1234567890-12345`, navigieren und diesen mit der linken Maustaste
 selektieren. Nun kann man z.B. über die Icons _Download Log_ oder _Run Shell_
 die Log-Einträge inspizieren oder eine Shell öffnen. Alternativ kann man beim
 Pod auch das Kontextmenü bzw. die rechte Maustaste benutzen.
@@ -971,7 +971,7 @@ groben Überblick verschaffen, wieviele Sicherheitslücken in den Bibliotheken i
 Image enthalten sind:
 
 ```shell
-    docker scout quickview juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+    docker scout quickview juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ```
 
 Dabei bedeutet:
@@ -988,8 +988,8 @@ Die Details zu den CVE-Records im Image kann man durch das Unterkommando `cves`
 von _Scout_ auflisten:
 
 ```shell
-    docker scout cves juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
-    docker scout cves --format only-packages juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
+    docker scout cves juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
+    docker scout cves --format only-packages juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
 ````
 
 Statt der Kommandozeile kann man auch den Menüpunkt "Docker Scout" im

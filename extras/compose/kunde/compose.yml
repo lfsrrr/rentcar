@@ -15,7 +15,7 @@
 
 # Aufruf:   docker compose up
 #           Falls paketobuildpacks/builder-jammy-base:latest statt tiny verwendet wurde:
-#             docker compose exec kunde bash
+#             docker compose exec rentcar bash
 #               id
 #               ps -ef
 #               env
@@ -33,15 +33,15 @@
 # https://docs.docker.com/compose/compose-file/05-services
 services:
   # https://stackoverflow.com/questions/76345884/how-to-select-specific-services-of-docker-compose-when-using-spring-boot-docker
-  kunde:
-    image: juergenzimmermann/kunde:2025.10.1-buildpacks-bellsoft
-    #image: juergenzimmermann/kunde:2025.10.1-buildpacks-eclipse
-    #image: juergenzimmermann/kunde:2025.10.1-buildpacks-azul
+  rentcar:
+    image: juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
+    #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-eclipse
+    #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-azul
 
-    #image: juergenzimmermann/kunde:2025.10.1-eclipse-noble
-    #image: juergenzimmermann/kunde:2025.10.1-eclipse-alpine
-    #image: juergenzimmermann/kunde:2025.10.1-azul
-    #image: juergenzimmermann/kunde:2025.10.1-sap
+    #image: juergenzimmermann/rentcar:2025.10.1-eclipse-noble
+    #image: juergenzimmermann/rentcar:2025.10.1-eclipse-alpine
+    #image: juergenzimmermann/rentcar:2025.10.1-azul
+    #image: juergenzimmermann/rentcar:2025.10.1-sap
 
     #entrypoint: ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell
@@ -68,13 +68,13 @@ services:
       # ABER dann muesste z.B. PostgreSQL fuer Kubernetes ein zweites Mal aufgesetzt werden :-(
       # DESHALB muss das Docker Image so gebaut werden, dass der Container mit dem Linux-User "root" laeuft :-(
       - type: bind
-        source: C:\Zimmermann\volumes\kunde-v1
+        source: C:\Zimmermann\volumes\rentcar-v1
         # macOS: Verzeichnis mit Zugriffsrechten 777 anlegen, d.h. chmod 777 /usr/local/volumes/tmp
         #source: /usr/local/volumes/tmp
         target: /tmp
     # https://docs.docker.com/compose/environment-variables/set-environment-variables
     env_file: .env
-    hostname: kunde
+    hostname: rentcar
     # https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop
     cap_drop: [ ALL ]
     deploy:

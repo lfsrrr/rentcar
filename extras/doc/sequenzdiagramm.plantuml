@@ -16,13 +16,13 @@
 
 actor Client
 
-boundary KundeController
-control KundeService
-control KundeRepository
+boundary rentcarController
+control rentcarService
+control rentcarRepository
 
-Client -> KundeController : GET / getById()
-KundeController -> KundeService: findById()
-KundeService -> KundeRepository: findById()
+Client -> rentcarController : GET / getById()
+rentcarController -> rentcarService: findById()
+rentcarService -> rentcarRepository: findById()
 
 footer (c) Jürgen Zimmermann
 
