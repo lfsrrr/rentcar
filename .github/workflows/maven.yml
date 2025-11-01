@@ -1,0 +1,60 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ] # Führt den Workflow bei jedem Push auf 'main' aus
+  pull_request:
+    branches: [ "main" ] # Führt den Workflow bei jedem Pull Request auf 'main' aus
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Verwendet eine aktuelle Ubuntu-VM für den Build
+
+    steps:
+    - uses: actions/checkout@v4 # 1. Code auschecken
+
+    # 2. JDK Setup: Setzt JDK 25 (oder die von Ihnen gewünschte Version)
+    - name: Set up JDK 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: '25' 
+        distribution: 'temurin'
+        cache: maven # Caching des lokalen Maven-Repositories für schnellere Builds
+
+    # 3. Haupt-Build & Statische Analyse
+    # Wir verwenden 'install', um alle Abhängigkeiten zu kompilieren und ggf. statische Analysen zu triggern.
+    # Wichtig: Die Tests werden hier übersprungen, falls Sie das in der pom.xml so konfiguriert haben.
+    - name: Maven Build & Site Generation
+      run: |
+        # Führt den Haupt-Build aus (Kompilierung und Paketierung)
+        mvn -B install -D'maven.test.skip=true' --file pom.xml
+        
+        # Generiert die Berichte für Checkstyle, PMD und SpotBugs (falls in pom.xml konfiguriert)
+        mvn site -D'maven.test.skip=true' --file pom.xml
+
+    # 4. Statische Analyse prüfen (Konventionen und Fehler)
+    # Wenn Sie das Enforcer Plugin verwenden, ist dies der wichtige Schritt.
+    - name: Run Quality Checks (Enforcer & Custom Checks)
+      run: |
+        # Dies ist der Befehl, der alle Enforcer-Regeln und Konventionen durchsetzt (clean install macht das meist schon)
+        mvn validate
+        
+    # 5. Optional: Hochladen des statischen Analyseberichts
+    # Dies macht Sinn, um die generierte target/site/project-reports.html später einsehen zu können.
+    - name: Upload Site Reports Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: maven-site-reports
+        path: target/site/
+
+    # Optional: Uploads the full dependency graph... (aus Ihrem Originalcode)
+    - name: Update dependency graph
+      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
