@@ -4,6 +4,10 @@ import java.time.Year;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Die Details eines Auto.
+ *
+ */
 
 public class CarDetails {
 

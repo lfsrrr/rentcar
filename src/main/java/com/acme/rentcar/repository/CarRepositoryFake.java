@@ -6,11 +6,21 @@ import com.acme.rentcar.entity.Customer;
 import com.acme.rentcar.entity.EngineType;
 import com.acme.rentcar.entity.Rental;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.Year;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Repository;
+
+
+/**
+ *  Mock Repo for testing.
+ *
+ */
 
 
 @Repository
@@ -36,7 +46,20 @@ public class CarRepositoryFake implements CarRepository {
         return FAKE_CARS;
     }
 
+    @Override
+    public Optional<Car> findById(final UUID id) {
+        return FAKE_CARS.stream()
+            .filter(car -> car.getId().equals(id))
+            .findFirst();
 
+    }
+
+    @Override
+    public Collection<Car> findByHersteller(final String hersteller) {
+        return FAKE_CARS.stream()
+            .filter(car -> car.getHersteller().equalsIgnoreCase(hersteller))
+            .collect(Collectors.toList());
+    }
 
     private static Car createTestCar(
         final UUID carId, final String hersteller, final String modell, final String kennzeichen,
@@ -67,11 +90,11 @@ public class CarRepositoryFake implements CarRepository {
 
         final Rental rental = new Rental(
             rentalId,
-            LocalDate.now().minusDays(10),
-            LocalDate.now().minusDays(5),
+            LocalDate.now(ZoneId.systemDefault()).minusDays(10),
+            LocalDate.now(ZoneId.systemDefault()).minusDays(5),
             550.00,
-            customer, // 1:1 Beziehung (Customer wird hier eingebettet/referenziert)
-            carId     // N:1 Beziehung (Fremdschlüssel zum Car)
+            customer,
+            carId
         );
 
 

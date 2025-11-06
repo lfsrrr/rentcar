@@ -21,7 +21,6 @@ import com.acme.rentcar.config.WebConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Import;
-// Import von ImportRuntimeHints entfernt
 import static com.acme.rentcar.Banner.TEXT;
 
 /// Klasse mit der `main`-Methode für die Anwendung auf Basis von _Spring Boot_.

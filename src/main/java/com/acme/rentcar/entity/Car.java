@@ -1,10 +1,14 @@
-package com.acme.rentcar.entity; // Paketname auf rentcar.entity angepasst
+package com.acme.rentcar.entity;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Car entity ist das Auto der Autovermietung.
+ *
+ */
 
 
 public class Car {

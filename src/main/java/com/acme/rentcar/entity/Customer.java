@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ *  Kunde der Autovermietung.
+ */
+
 public class Customer {
 
     private UUID id;
@@ -30,7 +34,6 @@ public class Customer {
 
     @Override
     public boolean equals(final Object other) {
-        // equals/hashCode basieren auf der ID
         return other instanceof Customer customer && Objects.equals(id, customer.id);
     }
 

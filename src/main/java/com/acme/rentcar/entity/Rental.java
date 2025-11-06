@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Die Implemntierung der Vermietung eines Auto.
+ *
+ */
 
 public class Rental {
 
