@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(CarController.API_PATH)
-final class CarController {
+public final class CarController {
 
-    static final String API_PATH = "/cars";
+    public static final String API_PATH = "/cars";
     private final CarService service;
 
     CarController(final CarService service) {
