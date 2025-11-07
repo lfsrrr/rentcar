@@ -12,7 +12,7 @@ public class CarService {
 
     private final CarRepository repository;
 
-    CarService(final CarRepository repository) {
+    public CarService(final CarRepository repository) {
         this.repository = repository;
     }
 

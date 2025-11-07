@@ -8,6 +8,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 /**
@@ -15,17 +16,12 @@ import org.springframework.web.service.annotation.HttpExchange;
  */
 @HttpExchange
 public interface CarClient {
-
-    // Entspricht GET /cars oder GET /cars?hersteller=X
-    // Der Pfad wird über CarController.API_PATH referenziert (was jetzt public ist).
-    @GetMapping(CarController.API_PATH)
+    @GetExchange
     Collection<Car> get(@RequestParam MultiValueMap<String, String> suchparameter);
 
-    // Entspricht GET /cars/{id} für die Erfolgsfälle
-    @GetMapping(CarController.API_PATH + "/{id}")
+    @GetExchange("/{id}")
     ResponseEntity<Car> getById(@PathVariable String id);
 
-    // Entspricht GET /cars/{id} für JsonPath-Tests (gibt Body als String zurück)
-    @GetMapping(CarController.API_PATH + "/{id}")
+    @GetExchange("/{id}")
     ResponseEntity<String> getByIdAsString(@PathVariable String id);
 }

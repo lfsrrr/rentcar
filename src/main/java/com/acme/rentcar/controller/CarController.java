@@ -37,9 +37,6 @@ public final class CarController {
     @GetMapping
     public Collection<Car> get(@RequestParam(required = false) final String hersteller) {
         if (hersteller == null) {
-            // Optional: Wenn der Parameter fehlt, kann hier eine leere Liste
-            // oder eine Fehlermeldung zurückgegeben werden, anstatt findAll() aufzurufen.
-            // Wir verwenden hier findAll(), aber es ist jetzt EINDEUTIG.
             return service.findAll();
         }
         return service.findByHersteller(hersteller);
