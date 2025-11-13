@@ -13,4 +13,7 @@ public interface CarRepository {
 
     Collection<Car> findByHersteller(final String hersteller);
 
+    Car save(final Car car);
+    Optional<Car> update(Car car);
+
 }
