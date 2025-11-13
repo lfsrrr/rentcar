@@ -3,6 +3,8 @@ package com.acme.rentcar.service;
 import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.repository.CarRepository;
 import com.acme.rentcar.repository.CarRepositoryFake;
+import com.acme.rentcar.controller.CarWriteDTO;
+import com.acme.rentcar.entity.EngineType;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -13,6 +15,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
+import java.time.LocalDate;
+import com.acme.rentcar.controller.CarWriteDTO;
+import com.acme.rentcar.entity.EngineType;
+import java.time.LocalDate;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -83,4 +90,32 @@ public final class CarServiceTest {
             .forEach(herstellerTmp -> softly.assertThat(herstellerTmp)
                 .isEqualTo(HERSTELLER_VORHANDEN));
     }
+
+    @Test
+    @DisplayName("Neues Auto anlegen (Create)")
+    void createCar() {
+        // given
+        // 1. Erstellen Sie ein gültiges DTO (Data Transfer Object)
+        final var dto = new CarWriteDTO(
+            "Mercedes",
+            "C-Klasse",
+            "KA-MB-123", // Gültiges Kennzeichen-Pattern
+            LocalDate.of(2024, 1, 1),
+            EngineType.HYBRID,
+            5, // Positive sitzplaetze
+            "Silber"
+        );
+
+        // when
+        // 2. Rufen Sie die create-Methode im Service auf
+        final var result = service.create(dto);
+
+        // then
+        // 3. Prüfen Sie das Ergebnis
+        assertThat(result).isNotNull();
+        // Prüfen, ob die Daten aus dem DTO korrekt übernommen wurden
+        assertThat(result.getHersteller()).isEqualTo("Mercedes");
+        assertThat(result.getDetails().getFarbe()).isEqualTo("Silber");
+    }
+
 }

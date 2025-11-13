@@ -166,25 +166,25 @@ spec:
               #mountPath: /workspace/certificate.crt
               name: certificate-{{ include "rentcar.name" . }}
               readOnly: true
-      priorityClassName: medium-priority
+      # priorityClassName: medium-priority
       volumes:
         - name: log-{{ include "rentcar.name" . }}{{ .Values.versionSuffix }}
           # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: '/Users/louis/IdeaProjects/Meilenstein 5/Volumes'
+            path: /Users/louis/IdeaProjects/Meilenstein 5/Volumes
             type: Directory
           # https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
           #emptyDir: {}
         - name: private-key-{{ include "rentcar.name" . }}
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: '/Users/louis/IdeaProjects/Meilenstein 5/rentCar/src/main/resources/private-key.pem'
+            path: /Users/louis/IdeaProjects/Meilenstein 5/rentCar/src/main/resources/private-key.pem
             type: File
         - name: certificate-{{ include "rentcar.name" . }}
           hostPath:
             # FIXME Pfad auf studentischen Notebooks anpassen
-            path: '/Users/louis/IdeaProjects/Meilenstein 5/rentCar/src/main/resources/certificate.crt'
+            path: /Users/louis/IdeaProjects/Meilenstein 5/rentCar/src/main/resources/certificate.crt
             type: File
       # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints
       # https://polaris.docs.fairwinds.com/checks/reliability
