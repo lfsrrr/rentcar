@@ -1,29 +1,26 @@
 package com.acme.rentcar.service;
 
-import com.acme.rentcar.controller.CarWriteDTO; // NEU
+import com.acme.rentcar.controller.CarWriteDTO;
 import com.acme.rentcar.entity.Car;
-import com.acme.rentcar.entity.CarDetails; // NEU
+import com.acme.rentcar.entity.CarDetails;
 import com.acme.rentcar.repository.CarRepository;
-import java.time.Year; // NEU
+import java.time.Year;
 import java.util.Collection;
-import java.util.List; // NEU
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-// Konvention: Service-Klasse MUSS public sein, damit Controller (anderes Paket) sie sieht
 public final class CarService {
 
     private final CarRepository repository;
 
-    // Konvention: Konstruktor Package-Private
     CarService(final CarRepository repository) {
         this.repository = repository;
     }
 
-    // --- GET Methoden (unverändert) ---
     public Collection<Car> findAll() {
         return repository.findAll();
     }
@@ -40,7 +37,6 @@ public final class CarService {
         return repository.findByHersteller(hersteller);
     }
 
-    // --- NEU: POST (Create) ---
     public Car create(final CarWriteDTO dto) {
         final var newCar = new Car();
         newCar.setId(UUID.randomUUID());
@@ -57,12 +53,12 @@ public final class CarService {
             Year.of(dto.erstzulassung().getYear())
         );
         newCar.setDetails(details);
-        newCar.setRentals(List.of()); // Neue Autos haben keine Miet-Historie
+        newCar.setRentals(List.of());
 
         return repository.save(newCar);
     }
 
-    // --- NEU: PUT (Update) ---
+
     public Car update(final UUID id, final CarWriteDTO dto) {
         final var existingCar = findById(id);
 

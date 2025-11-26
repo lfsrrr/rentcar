@@ -1,4 +1,4 @@
-package com.acme.rentcar.entity; // Paketname angepasst
+package com.acme.rentcar.entity;
 
 import java.time.Year;
 import java.util.Objects;
@@ -14,10 +14,10 @@ public class CarDetails {
     private UUID id;
     private String farbe;
     private int sitzplaetze;
-    private EngineType motor; // Verwendet das neue Enum
+    private EngineType motor;
     private Year baujahr;
 
-
+    @SuppressWarnings("NullAway.Init")
     public CarDetails() {
     }
 

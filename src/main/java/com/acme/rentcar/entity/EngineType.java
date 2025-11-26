@@ -1,4 +1,4 @@
-package com.acme.rentcar.entity; // Muss im Entity-Paket liegen
+package com.acme.rentcar.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -12,13 +12,13 @@ import java.util.stream.Stream;
 
 public enum EngineType {
 
-    BENZIN("B"), // Benzin
+    BENZIN("B"),
 
-    DIESEL("D"), // Diesel
+    DIESEL("D"),
 
-    ELEKTRO("E"), // Elektro
+    ELEKTRO("E"),
 
-    HYBRID("H"); // Hybrid
+    HYBRID("H");
 
     private final String value;
 
@@ -36,6 +36,6 @@ public enum EngineType {
         return Stream.of(values())
             .filter(engineType -> engineType.value.equalsIgnoreCase(value))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException("Ungueltiger EngineType: " + value));
     }
 }

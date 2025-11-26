@@ -1302,6 +1302,11 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -1513,6 +1518,14 @@
                     <groupId>jakarta.enterprise</groupId>
                     <artifactId>jakarta.enterprise.cdi-api</artifactId>
                     <version>${cdi.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-stdlib</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-reflect</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>

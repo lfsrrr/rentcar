@@ -24,11 +24,10 @@ public class Car {
 
     private List<Rental> rentals;
 
-
+    @SuppressWarnings("NullAway.Init")
     public Car() {
 
     }
-
 
     public Car(final UUID id, final String hersteller, final String modell, final LocalDate erstzulassung,
                final String kennzeichen, final CarDetails details, final List<Rental> rentals) {
@@ -65,8 +64,6 @@ public class Car {
             '}';
     }
 
-    // --- Getter und Setter (konventionell) ---
-    // (Beachten Sie die sinnvolle Reihenfolge von Attributen und Funktionen)
 
     public UUID getId() {
         return id;

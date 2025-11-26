@@ -14,7 +14,8 @@ import java.time.LocalDate;
  */
 public record CarWriteDTO(
     @NotNull(message = "Hersteller darf nicht null sein")
-    @Size(min = 2, max = 50, message = "Hersteller muss zwischen 2 und 50 Zeichen lang sein")
+    // KORREKTUR: Verwendung von Konstanten statt "Magic Numbers" (2, 50)
+    @Size(min = CarWriteDTO.MIN_HERSTELLER, max = CarWriteDTO.MAX_HERSTELLER, message = "Hersteller fehlerhaft")
     String hersteller,
 
     @NotBlank(message = "Modell darf nicht leer sein")
@@ -35,4 +36,6 @@ public record CarWriteDTO(
 
     String farbe
 ) {
+    public static final int MIN_HERSTELLER = 2;
+    public static final int MAX_HERSTELLER = 50;
 }

@@ -9,11 +9,11 @@ public interface CarRepository {
 
     Collection<Car> findAll();
 
-    Optional<Car> findById(final UUID id);
+    Optional<Car> findById(UUID id);
 
-    Collection<Car> findByHersteller(final String hersteller);
+    Collection<Car> findByHersteller(String hersteller);
 
-    Car save(final Car car);
+    Car save(Car car);
     Optional<Car> update(Car car);
 
 }

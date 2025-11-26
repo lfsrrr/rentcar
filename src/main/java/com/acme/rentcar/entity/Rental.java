@@ -1,4 +1,4 @@
-package com.acme.rentcar.entity; // Paketname auf rentcar.entity angepasst
+package com.acme.rentcar.entity;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,6 +18,7 @@ public class Rental {
     private Customer customer;
     private UUID carId;
 
+    @SuppressWarnings("NullAway.Init")
     public Rental() {
 
     }

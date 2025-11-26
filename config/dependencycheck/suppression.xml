@@ -25,4 +25,11 @@
     xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="https://dependency-check.github.io/DependencyCheck/dependency-suppression.4.1 https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress>
+        <notes><![CDATA[
+       Suppress CVE-2022-31691 for spring-boot-devtools (Development dependency)
+       ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-devtools@.*$</packageUrl>
+        <cve>CVE-2022-31691</cve>
+    </suppress>
 </suppressions>

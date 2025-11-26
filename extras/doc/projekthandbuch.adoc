@@ -61,7 +61,7 @@ bla bla
 ."rentcarController" für Lesezugriffe an der REST-Schnittstelle
 [plantuml,rentcarController,svg]
 ----
-include::./rentcarController.plantuml[]
+include::./CarController.plantuml[]
 ----
 
 ."Sequenzdiagramm" mit den Methodenaufrufen

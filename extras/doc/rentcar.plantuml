@@ -1,0 +1,107 @@
+' Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+@startuml rentcar
+
+skinparam classAttributeIconSize 0
+' skinparam monochrome true
+
+package java {
+    package util {
+        class UUID
+        interface List<T>
+    }
+
+    package time {
+        class LocalDate
+        class Year
+    }
+}
+
+package com.acme.rentcar.entity #DDDDDD {
+
+    enum EngineType {
+        BENZIN
+        DIESEL
+        ELEKTRO
+        HYBRID
+    }
+
+    class Car << entity >> {
+        id : UUID
+        hersteller : String
+        modell : String
+        erstzulassung : LocalDate
+        kennzeichen : String
+        details : CarDetails
+        rentals : List<Rental>
+    }
+
+    class CarDetails {
+        id : UUID
+        farbe : String
+        sitzplaetze : int
+        motor : EngineType
+        baujahr : Year
+    }
+
+    class Rental {
+        id : UUID
+        mietbeginn : LocalDate
+        mietende : LocalDate
+        gesamtpreis : double
+        customer : Customer
+        carId : UUID
+    }
+
+    class Customer {
+        id : UUID
+        vorname : String
+        nachname : String
+        email : String
+        geburtsdatum : LocalDate
+    }
+
+    ' Beziehungen (Kardinalitäten)
+
+    ' 1 Car hat 1 CarDetails (Komposition)
+    Car *--> "1" CarDetails : details
+
+    ' 1 Car hat N Rentals (Komposition oder Aggregation)
+    Car *--> "0..*" Rental : rentals
+
+    ' 1 Rental hat 1 Customer (Assoziation)
+    Rental --> "1" Customer : customer
+
+    ' Abhängigkeiten zu Typen
+    CarDetails .up.> EngineType
+    CarDetails .up.> Year
+
+    ' Abhängigkeiten zu Java-Klassen (optional, der Übersichtlichkeit halber oft weggelassen)
+    Car ..> UUID
+    Car ..> LocalDate
+    Car ..> List
+
+    Rental ..> LocalDate
+    Rental ..> UUID
+
+    Customer ..> LocalDate
+    Customer ..> UUID
+}
+
+hide empty members
+
+footer (c) Jürgen Zimmermann
+
+@enduml

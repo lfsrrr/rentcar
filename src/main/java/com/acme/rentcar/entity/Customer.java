@@ -1,4 +1,4 @@
-package com.acme.rentcar.entity; // Paketname auf rentcar.entity angepasst
+package com.acme.rentcar.entity;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -16,7 +16,7 @@ public class Customer {
     private String email;
     private LocalDate geburtsdatum;
 
-
+    @SuppressWarnings("NullAway.Init")
     public Customer() {
 
     }
