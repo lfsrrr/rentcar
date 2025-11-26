@@ -11,15 +11,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Repository;
 
-///
-/// Mock Repo for testing.
-///
+/// Mock-Repository
 @Repository
+@SuppressWarnings("checkstyle:ParameterNumber")
 final class CarRepositoryFake implements CarRepository {
 
     private static final List<Car> FAKE_CARS = new ArrayList<>(List.of(
@@ -28,25 +27,11 @@ final class CarRepositoryFake implements CarRepository {
             "BMW", "M4", "KA-MA-11", EngineType.BENZIN, "Gelb", 2023,
             "Max", "Mustermann", "max@hka.de"
         ),
+        // ... (Ihre weiteren Autos hier lassen oder einfügen) ...
         createTestCar(
             UUID.fromString("7302f354-1b15-408a-b83b-f542d9c41d08"),
             "Tesla", "Model S", "HD-TS-22", EngineType.ELEKTRO, "Weiß", 2024,
             "Lena", "Meyer", "lena@hka.de"
-        ),
-        createTestCar(
-            UUID.fromString("a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6"),
-            "Porsche", "911", "S-P-911", EngineType.BENZIN, "Rot", 2025,
-            "Tim", "Schulz", "tim@hka.de"
-        ),
-        createTestCar(
-            UUID.fromString("b2c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7"),
-            "Volkswagen", "Golf", "MA-VW-04", EngineType.DIESEL, "Blau", 2022,
-            "Anna", "Klein", "anna@hka.de"
-        ),
-        createTestCar(
-            UUID.fromString("c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8"),
-            "Audi", "Q5", "B-AQ-55", EngineType.HYBRID, "Schwarz", 2024,
-            "Paul", "Lang", "paul@hka.de"
         )
     ));
 
@@ -56,10 +41,11 @@ final class CarRepositoryFake implements CarRepository {
     }
 
     @Override
-    public Optional<Car> findById(final UUID id) {
+    public @Nullable Car findById(final UUID id) {
         return FAKE_CARS.stream()
             .filter(car -> car.getId().equals(id))
-            .findFirst();
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
@@ -76,16 +62,15 @@ final class CarRepositoryFake implements CarRepository {
     }
 
     @Override
-    public Optional<Car> update(final Car car) {
-        final var oldCarOptional = findById(car.getId());
+    public @Nullable Car update(final Car car) {
+        final var existingCar = findById(car.getId());
+        if (existingCar == null) {
+            return null;
+        }
 
-        final var carToRemove = oldCarOptional.orElseThrow(
-            () -> new IllegalStateException("Update fehlgeschlagen: Auto nicht in Fake-DB gefunden: " + car.getId())
-        );
-
-        FAKE_CARS.remove(carToRemove);
+        FAKE_CARS.remove(existingCar);
         FAKE_CARS.add(car);
-        return Optional.of(car);
+        return car;
     }
 
     @SuppressWarnings("checkstyle:ParameterNumber")

@@ -1,74 +1,81 @@
+
 package com.acme.rentcar.controller;
 
 import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import java.net.URI;
+import java.lang.StableValue;
 import java.util.Collection;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping(CarController.API_PATH)
-public final class CarController {
+@RequestMapping("/cars")
+@SuppressWarnings("preview")
+final class CarController {
 
-    public static final String API_PATH = "/cars";
+    private static final StableValue<Logger> LOGGER = StableValue.of();
+
+    static {
+        LOGGER.setOrThrow(LoggerFactory.getLogger(CarController.class));
+    }
+
     private final CarService service;
 
     CarController(final CarService service) {
         this.service = service;
     }
 
-    @Operation(summary = "Get users",
-        description = "Get list of users")
+    @Operation(summary = "Alle Autos abrufen")
     @GetMapping("/all")
-    public Collection<Car> getAll() {
+    Collection<Car> getAll() {
+        LOGGER.orElseThrow().debug("GET /all");
         return service.findAll();
     }
 
+    @Operation(summary = "Auto per ID suchen")
+    @ApiResponse(responseCode = "200", description = "Auto gefunden")
+    @ApiResponse(responseCode = "404", description = "Auto nicht gefunden")
     @GetMapping("/{id}")
-    public Car getById(@PathVariable final UUID id) {
+    Car getById(@PathVariable final UUID id) {
         return service.findById(id);
     }
 
+    @Operation(summary = "Autos filtern (z.B. nach Hersteller)")
     @GetMapping
-    public Collection<Car> getByQuery(@RequestParam(required = false) final String hersteller) {
+    Collection<Car> getByQuery(@RequestParam(required = false) final String hersteller) {
         if (hersteller == null) {
             return service.findAll();
         }
         return service.findByHersteller(hersteller);
     }
 
+    @Operation(summary = "Neues Auto anlegen")
+    @ApiResponse(responseCode = "201", description = "Erfolgreich angelegt")
     @PostMapping
-    public ResponseEntity<Void> createCar(@RequestBody @Valid final CarWriteDTO carDto) {
-        final Car newCar = service.create(carDto);
-
-        final URI location = ServletUriComponentsBuilder
+    ResponseEntity<Void> createCar(@RequestBody @Valid final CarDTO carDto) {
+        final var newCar = service.create(carDto);
+        final var location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(newCar.getId())
             .toUri();
-
         return ResponseEntity.created(location).build();
     }
 
+    @Operation(summary = "Auto aktualisieren")
     @PutMapping("/{id}")
-    public ResponseEntity<Car> updateCar(
+    ResponseEntity<Car> updateCar(
         @PathVariable final UUID id,
-        @RequestBody @Valid final CarWriteDTO carDto
+        @RequestBody @Valid final CarDTO carDto
     ) {
-        final Car updatedCar = service.update(id, carDto);
-
+        final var updatedCar = service.update(id, carDto);
         return ResponseEntity.ok(updatedCar);
     }
 }

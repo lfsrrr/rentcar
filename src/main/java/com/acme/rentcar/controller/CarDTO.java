@@ -8,14 +8,13 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
-/**
- * DTO (Data Transfer Object) fuer das Anlegen (POST) und Aendern (PUT) eines Autos.
- * Beinhaltet Jakarta Validation Constraints.
- */
-public record CarWriteDTO(
+///
+/// DTO fuer das Anlegen (POST) und Aendern (PUT) eines Autos.
+///
+public record CarDTO(
     @NotNull(message = "Hersteller darf nicht null sein")
     // KORREKTUR: Verwendung von Konstanten statt "Magic Numbers" (2, 50)
-    @Size(min = CarWriteDTO.MIN_HERSTELLER, max = CarWriteDTO.MAX_HERSTELLER, message = "Hersteller fehlerhaft")
+    @Size(min = CarDTO.MIN_HERSTELLER, max = CarDTO.MAX_HERSTELLER, message = "Hersteller fehlerhaft")
     String hersteller,
 
     @NotBlank(message = "Modell darf nicht leer sein")

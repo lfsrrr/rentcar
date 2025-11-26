@@ -2,15 +2,11 @@ package com.acme.rentcar.controller;
 
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
+import org.springframework.http.ProblemDetail; // WICHTIG: ProblemDetail als Rückgabetyp
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
-
-/**
- * Faengt Validierungsfehler (400) und 404 (Not Found) global ab.
- */
 
 @RestControllerAdvice
 final class GlobalExceptionHandler {
@@ -28,9 +24,10 @@ final class GlobalExceptionHandler {
 
     @ExceptionHandler
     ProblemDetail onResponseStatus(final ResponseStatusException ex) {
-        final var problemDetail = ProblemDetail.forStatus(ex.getStatusCode());
-        problemDetail.setTitle("Resource Not Found");
-        problemDetail.setDetail(ex.getReason());
+
+        final var problemDetail = ProblemDetail.forStatusAndDetail(ex.getStatusCode(), ex.getReason());
+
+        problemDetail.setTitle(ex.getStatusCode().toString());
         return problemDetail;
     }
 }

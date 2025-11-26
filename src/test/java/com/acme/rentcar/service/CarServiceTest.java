@@ -1,6 +1,6 @@
 package com.acme.rentcar.service;
 
-import com.acme.rentcar.controller.CarWriteDTO;
+import com.acme.rentcar.controller.CarDTO;
 import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.entity.EngineType;
 import com.acme.rentcar.repository.CarRepository;
@@ -105,7 +105,7 @@ public final class CarServiceTest {
     @DisplayName("Neues Auto anlegen (Create)")
     void createCar() {
         // given
-        final var dto = new CarWriteDTO(
+        final var dto = new CarDTO(
             "Mercedes",
             "C-Klasse",
             "KA-MB-123",
