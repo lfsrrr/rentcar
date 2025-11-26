@@ -3,6 +3,7 @@ package com.acme.rentcar.entity;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 /**
  * Die Implemntierung der Vermietung eines Auto.
@@ -14,7 +15,7 @@ public class Rental {
     private UUID id;
     private LocalDate mietbeginn;
     private LocalDate mietende;
-    private double gesamtpreis;
+    private BigDecimal gesamtpreis;
     private Customer customer;
     private UUID carId;
 
@@ -24,7 +25,7 @@ public class Rental {
     }
 
     public Rental(final UUID id, final LocalDate mietbeginn, final LocalDate mietende,
-                  final double gesamtpreis, final Customer customer, final UUID carId) {
+                  final BigDecimal gesamtpreis, final Customer customer, final UUID carId) {
         this.id = id;
         this.mietbeginn = mietbeginn;
         this.mietende = mietende;
@@ -56,7 +57,7 @@ public class Rental {
             '}';
     }
 
-    // --- Getter und Setter ---
+
 
     public UUID getId() {
         return id;
@@ -82,11 +83,11 @@ public class Rental {
         this.mietende = mietende;
     }
 
-    public double getGesamtpreis() {
+    public BigDecimal getGesamtpreis() {
         return gesamtpreis;
     }
 
-    public void setGesamtpreis(final double gesamtpreis) {
+    public void setGesamtpreis(final BigDecimal gesamtpreis) {
         this.gesamtpreis = gesamtpreis;
     }
 

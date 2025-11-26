@@ -1,0 +1,34 @@
+@startuml
+actor User
+participant "Bruno / Client" as Client
+participant CarController
+participant CarService
+participant CarRepository
+participant CarWriteDTO
+participant Car
+
+User -> Client : POST /cars (JSON)
+activate Client
+Client -> CarController : createCar(dto)
+activate CarController
+
+CarController -> CarService : create(dto)
+activate CarService
+
+create Car
+CarService -> Car : new()
+CarService -> CarWriteDTO : daten auslesen
+CarService -> Car : setHersteller(), setModell()...
+
+CarService -> CarRepository : save(car)
+activate CarRepository
+CarRepository --> CarService : car
+deactivate CarRepository
+
+CarService --> CarController : car
+deactivate CarService
+
+CarController --> Client : 201 Created (Location Header)
+deactivate CarController
+deactivate Client
+@enduml

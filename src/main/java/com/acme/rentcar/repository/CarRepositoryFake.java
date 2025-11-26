@@ -8,6 +8,7 @@ import com.acme.rentcar.entity.Rental;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.ZoneId;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,13 +28,28 @@ final class CarRepositoryFake implements CarRepository {
             "BMW", "M4", "KA-MA-11", EngineType.BENZIN, "Gelb", 2023,
             "Max", "Mustermann", "max@hka.de"
         ),
-        // ... (Ihre weiteren Autos hier lassen oder einfügen) ...
+        createTestCar(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            "Porsche", "911", "S-P-911", EngineType.BENZIN, "Rot", 2025,
+            "Tim", "Schulz", "tim@hka.de"
+        ),
+        createTestCar(
+            UUID.fromString("b2c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7"),
+            "Volkswagen", "Golf", "MA-VW-04", EngineType.DIESEL, "Blau", 2022,
+            "Anna", "Klein", "anna@hka.de"
+        ),
+        createTestCar(
+            UUID.fromString("c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8"),
+            "Audi", "Q5", "B-AQ-55", EngineType.HYBRID, "Schwarz", 2024,
+            "Paul", "Lang", "paul@hka.de"
+        ),
         createTestCar(
             UUID.fromString("7302f354-1b15-408a-b83b-f542d9c41d08"),
             "Tesla", "Model S", "HD-TS-22", EngineType.ELEKTRO, "Weiß", 2024,
             "Lena", "Meyer", "lena@hka.de"
         )
     ));
+
 
     @Override
     public Collection<Car> findAll() {
@@ -102,7 +118,7 @@ final class CarRepositoryFake implements CarRepository {
             rentalId,
             LocalDate.now(ZoneId.systemDefault()).minusDays(10),
             LocalDate.now(ZoneId.systemDefault()).minusDays(5),
-            550.00,
+            BigDecimal.valueOf(550.00),
             customer,
             carId
         );
