@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/// Implementiert den Unit-Test
 @Tag("unit")
 @Tag("service-read")
 @ExtendWith(SoftAssertionsExtension.class)
@@ -34,7 +35,7 @@ public final class CarServiceTest {
     @SuppressWarnings("NullAway.Init")
     private SoftAssertions softly;
 
-
+    /// Initialisiert den CarService
     CarServiceTest() {
         final CarRepository repo;
         try {
@@ -52,6 +53,8 @@ public final class CarServiceTest {
         service = new CarService(repo);
     }
 
+    /// Testet die findby-Funktion
+    /// @param id ist die ID des Autos
     @ParameterizedTest(name = "[{index}] Suche mit vorhandener ID: id={0}")
     @ValueSource(strings = ID_VORHANDEN)
     @DisplayName("Suche Auto mit id")
@@ -68,6 +71,8 @@ public final class CarServiceTest {
             .isEqualTo(carId);
     }
 
+    /// Erfolgreiches Suchen des Herstellers
+    /// @param hersteller ist der name des Autoherstellers
     @ParameterizedTest(name = "[{index}] Suche mit vorhandenem Hersteller: hersteller={0}")
     @ValueSource(strings = HERSTELLER_VORHANDEN)
     @DisplayName("Suche Auto mit vorhandenem Hersteller")
@@ -88,6 +93,7 @@ public final class CarServiceTest {
                 .isEqualTo(HERSTELLER_VORHANDEN));
     }
 
+    /// Testet, dass ein Hersteller nicht gefunen wurde und das Objekt leer ist
     @Test
     @DisplayName("Suche Auto mit unbekanntem Hersteller (Keine Treffer)")
     void findByHerstellerNichtVorhanden() {
@@ -100,7 +106,7 @@ public final class CarServiceTest {
         assertThat(cars).isNotNull().isEmpty();
     }
 
-    // Test für Neuanlegen (Create)
+    /// Test für Neuanlegen (Create)
     @Test
     @DisplayName("Neues Auto anlegen (Create)")
     void createCar() {

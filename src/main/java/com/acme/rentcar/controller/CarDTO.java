@@ -9,9 +9,15 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
-/**
- * DTO fuer das Anlegen (POST) und Aendern (PUT) eines Autos.
- */
+/// DTO für Auto-Daten.
+///
+/// @param hersteller Der Herstellername.
+/// @param modell Die Modellbezeichnung.
+/// @param kennzeichen Das Kennzeichen.
+/// @param erstzulassung Das Datum.
+/// @param motor Der Motortyp.
+/// @param sitzplaetze Anzahl der Sitze.
+/// @param farbe Die Lackierung.
 public record CarDTO(
     @Schema(example = "Volkswagen", description = "Der Hersteller des Autos")
     @NotNull(message = "Hersteller darf nicht null sein")
@@ -42,6 +48,8 @@ public record CarDTO(
     @Schema(example = "Blau Metallic", description = "Außenfarbe")
     String farbe
 ) {
+    /// Minimale Länge für den Hersteller.
     public static final int MIN_HERSTELLER = 2;
+    /// Maximale Länge für den Hersteller.
     public static final int MAX_HERSTELLER = 50;
 }

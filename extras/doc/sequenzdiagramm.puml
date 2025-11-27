@@ -1,34 +1,56 @@
-@startuml
+' Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+@startuml sequenzdiagramm
+
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
 actor User
 participant "Bruno / Client" as Client
-participant CarController
-participant CarService
-participant CarRepository
-participant CarWriteDTO
-participant Car
+participant ":CarController" as Controller << boundary >>
+participant ":CarService" as Service << control >>
+participant "carDto:CarDTO" as DTO << DTO >>
+participant "newCar:Car" as Entity << entity >>
+participant ":CarRepository" as Repository << control >>
 
 User -> Client : POST /cars (JSON)
 activate Client
-Client -> CarController : createCar(dto)
-activate CarController
 
-CarController -> CarService : create(dto)
-activate CarService
+Client -> Controller : createCar(carDto)
+activate Controller
 
-create Car
-CarService -> Car : new()
-CarService -> CarWriteDTO : daten auslesen
-CarService -> Car : setHersteller(), setModell()...
+' Controller ruft Service
+Controller -> Service : create(carDto)
+activate Service
 
-CarService -> CarRepository : save(car)
-activate CarRepository
-CarRepository --> CarService : car
-deactivate CarRepository
+' Service erstellt die neue Entity (Mapping Logik)
+create Entity
+Service -> Entity : new()
 
-CarService --> CarController : car
-deactivate CarService
+' Service liest Werte aus dem DTO (Record Getter)
+Service -> DTO : hersteller()
+Service -> DTO : modell()
+' ... weitere Getter ...
 
-CarController --> Client : 201 Created (Location Header)
-deactivate CarController
+' Service setzt Werte in die Entity
+Service -> Entity : setHersteller(...)
+Service -> Entity : setModell(...)
+note right: Manuelles Mapping\nim Service
+
+' Speichern
+Service -> Repository : save(newCar)
+activate Repository
+Repository --> Service : newCar
+deactivate Repository
+
+' Rückkehr zum Controller
+Service --> Controller : newCar
+deactivate Service
+
+' Controller baut Response
+Controller --> Client : 201 Created
+note right: Location Header gesetzt
+deactivate Controller
+
 deactivate Client
+
 @enduml

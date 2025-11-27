@@ -22,6 +22,13 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("checkstyle:ParameterNumber")
 final class CarRepositoryFake implements CarRepository {
 
+    /// Erstellt eine Instanz des Fake-Repositories.
+    ///
+    /// Dieser Konstruktor ist notwendig, um Javadoc-Warnings zum fehlenden
+    /// Default-Konstruktor zu vermeiden.
+    CarRepositoryFake() {
+    }
+
     private static final List<Car> FAKE_CARS = new ArrayList<>(List.of(
         createTestCar(
             UUID.fromString("c0714b62-9e9f-43b6-905c-d5f9d14620f1"),
