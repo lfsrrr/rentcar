@@ -7,6 +7,7 @@ import java.util.UUID;
 ///
 /// Kunde der Autovermietung.
 ///
+@SuppressWarnings("checkstyle:HiddenField")
 public class Customer {
 
     private UUID id;

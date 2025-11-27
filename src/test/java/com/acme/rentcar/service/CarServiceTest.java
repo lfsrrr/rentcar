@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Tag("service-read")
 @ExtendWith(SoftAssertionsExtension.class)
 @DisplayName("Geschaeftslogik fuer Lesen testen (Unit-Test)")
-public final class CarServiceTest {
+final class CarServiceTest {
 
     private static final String ID_VORHANDEN = "c0714b62-9e9f-43b6-905c-d5f9d14620f1";
     private static final String HERSTELLER_VORHANDEN = "BMW";
@@ -36,6 +36,7 @@ public final class CarServiceTest {
     private SoftAssertions softly;
 
     /// Initialisiert den CarService
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     CarServiceTest() {
         final CarRepository repo;
         try {
@@ -46,8 +47,8 @@ public final class CarServiceTest {
             constructor.setAccessible(true);
 
             repo = (CarRepository) constructor.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("Konnte Fake-Repository nicht laden: " + e.getMessage(), e);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Konnte Fake-Repository nicht laden: " + e.getMessage(), e);
         }
 
         service = new CarService(repo);

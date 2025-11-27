@@ -8,6 +8,7 @@ import java.util.UUID;
 ///
 /// Car entity ist das Auto der Autovermietung.
 ///
+@SuppressWarnings("PMD.ShortClassName")
 public class Car {
     private UUID id;
     private String hersteller;

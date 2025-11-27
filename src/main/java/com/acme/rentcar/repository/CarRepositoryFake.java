@@ -5,10 +5,10 @@ import com.acme.rentcar.entity.CarDetails;
 import com.acme.rentcar.entity.Customer;
 import com.acme.rentcar.entity.EngineType;
 import com.acme.rentcar.entity.Rental;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.ZoneId;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,13 +21,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @SuppressWarnings("checkstyle:ParameterNumber")
 final class CarRepositoryFake implements CarRepository {
-
-    /// Erstellt eine Instanz des Fake-Repositories.
-    ///
-    /// Dieser Konstruktor ist notwendig, um Javadoc-Warnings zum fehlenden
-    /// Default-Konstruktor zu vermeiden.
-    CarRepositoryFake() {
-    }
 
     private static final List<Car> FAKE_CARS = new ArrayList<>(List.of(
         createTestCar(
@@ -57,6 +50,12 @@ final class CarRepositoryFake implements CarRepository {
         )
     ));
 
+    /// Erstellt eine Instanz des Fake-Repositories.
+    ///
+    /// Dieser Konstruktor ist notwendig, um Javadoc-Warnings zum fehlenden
+    /// Default-Konstruktor zu vermeiden.
+    CarRepositoryFake() {
+    }
 
     @Override
     public Collection<Car> findAll() {
