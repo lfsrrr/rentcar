@@ -1773,9 +1773,9 @@
                                 <require>asciidoctor-diagram</require>
                             </requires>
                             <attributes>
-                                <!-- Die Ausgabe "plantuml-full" bezieht sich auf ein Binary, nicht auf die JAR-Datei -->
+                                <!-- Die Ausgabe "plantuml-full" bezieht sich auf ein Binary, nicht auf die JAR-Datei
                                 <plantumlclasspath>C:/Zimmermann/plantuml/plantuml.jar</plantumlclasspath>
-                                <graphvizdot>C:/Zimmermann/Graphviz/bin/dot.exe</graphvizdot>
+                                <graphvizdot>C:/Zimmermann/Graphviz/bin/dot.exe</graphvizdot> -->
                                 <attribute-missing>warn</attribute-missing>
                             </attributes>
                             <!-- <outputDirectory>${project.build.directory}/generated-docs</outputDirectory> -->

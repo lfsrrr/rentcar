@@ -38,7 +38,7 @@ IMPORTANT: Copyright (C) 2015 - present Jürgen Zimmermann, Hochschule Karlsruhe
 
 === Der Microservice im Überblick
 
-bla bla
+Dieses Projekthandbuch dokumentiert den Microservice "rentcar", der für die Verwaltung von Fahrzeugen und deren Vermietung zuständig ist.
 
 .Use Cases für den Microservice "rentcar"
 [plantuml,use-cases,svg]
@@ -46,62 +46,43 @@ bla bla
 include::./use-cases.plantuml[]
 ----
 
-bla bla
+Die Architektur basiert auf Spring Boot. Folgendes Diagramm zeigt die groben Komponenten.
 
 .Komponenten des Microservice "rentcar"
 [plantuml,komponenten,svg]
 ----
-include::./komponenten.plantuml[]
+include::./Komponenten.plantuml[]
 ----
 
 === Die REST-Schnittstelle
 
-bla bla
+Die Kommunikation nach außen erfolgt über eine REST-API. Der `CarController` stellt Endpunkte für CRUD-Operationen (Create, Read, Update, Delete) bereit.
 
-."rentcarController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,rentcarController,svg]
+."CarController" für die REST-Schnittstelle
+[plantuml,CarController,svg]
 ----
 include::./CarController.plantuml[]
 ----
 
-."Sequenzdiagramm" mit den Methodenaufrufen
-[plantuml,sequenzdiagramm,svg]
-----
-include::sequenzdiagramm.plantuml[]
-----
-
-."rentcarWriteController" für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,rentcarWriteController,svg]
-----
-include::./rentcarWriteController.plantuml[]
-----
-
 === Die Geschäftslogik
 
-bla bla
+Die eigentliche Logik befindet sich in der Service-Schicht (`CarService`), die zwischen dem Controller und dem Repository vermittelt.
 
-.Die Service-Klasse "rentcarService" für die Geschäftslogik
-[plantuml,rentcarService,svg]
-----
-include::./rentcarService.plantuml[]
-----
-
-bla bla
-
-.Die Service-Klasse "rentcarWriteService" für die Geschäftslogik
-[plantuml,rentcarWriteService,svg]
-----
-include::./rentcarWriteService.plantuml[]
-----
+// Falls CarService.plantuml existiert, hier einkommentieren:
+// .Die Service-Klasse "CarService" für die Geschäftslogik
+// [plantuml,CarService,svg]
+// ----
+// include::./CarService.plantuml[]
+// ----
 
 === Die Entity-Klassen
 
-bla bla
+Die Datenhaltung erfolgt über JPA-Entities. Das folgende Diagramm zeigt die Struktur der `Car`-Entity und ihrer Abhängigkeiten.
 
-.Die Entity-Klasse "rentcar" für rentcarndaten
-[plantuml,rentcar,svg]
+.Die Entity-Klasse "Car"
+[plantuml,Car,svg]
 ----
-include::./rentcar.plantuml[]
+include::./Car.plantuml[]
 ----
 
 == Programmierrichtlinien
