@@ -24,7 +24,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 ///
 /// Stellt HTTP-Endpunkte bereit, um Autos zu suchen, neu anzulegen
 /// oder bestehende Einträge zu aktualisieren.
-@RestController
+///
+/// ![CarController Diagramm](file:///Users/louis/IdeaProjects/Meilenstein%205/rentCar/target/generated-docs/CarController.svg)@RestController
 @RequestMapping("/cars")
 @SuppressWarnings("preview")
 final class CarController {

@@ -1,17 +1,20 @@
 package com.acme.rentcar.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.Instant;
+import java.net.URI;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 /// Globaler Exception Handler.
+///
+/// Nutzt nun das Spring 6 Standard-Format ProblemDetail (RFC 7807) anstelle
+/// eines eigenen ErrorResponse-Objekts.
 @RestControllerAdvice
 final class GlobalExceptionHandler {
 
@@ -23,9 +26,9 @@ final class GlobalExceptionHandler {
     ///
     /// @param ex Die aufgetretene Exception.
     /// @param request Der HTTP-Request.
-    /// @return Die Fehlerantwort als JSON.
+    /// @return Ein ProblemDetail Objekt mit den Validierungsfehlern.
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<ErrorResponse> onMethodArgumentNotValid(
+    ProblemDetail onMethodArgumentNotValid(
         final MethodArgumentNotValidException ex,
         final HttpServletRequest request
     ) {
@@ -33,37 +36,37 @@ final class GlobalExceptionHandler {
             .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .collect(Collectors.joining(", "));
 
-        final var errorResponse = new ErrorResponse(
-            Instant.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            "Validation Failed",
-            details,
-            request.getRequestURI()
+        final var problemDetail = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            details
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        problemDetail.setTitle("Validation Failed");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return problemDetail;
     }
 
-    /// Behandelt Not Found Fehler (404).
+    /// Behandelt ResponseStatusExceptions (z.B. 404 Not Found).
     ///
     /// @param ex Die aufgetretene Exception.
     /// @param request Der HTTP-Request.
-    /// @return Die Fehlerantwort als JSON.
+    /// @return Ein ProblemDetail Objekt.
     @ExceptionHandler(ResponseStatusException.class)
-    ResponseEntity<ErrorResponse> onResponseStatus(
+    ProblemDetail onResponseStatus(
         final ResponseStatusException ex,
         final HttpServletRequest request
     ) {
         final String message = Objects.requireNonNullElse(ex.getReason(), "Unknown Error");
 
-        final var errorResponse = new ErrorResponse(
-            Instant.now(),
-            ex.getStatusCode().value(),
-            "Error",
-            message,
-            request.getRequestURI()
+        final var problemDetail = ProblemDetail.forStatusAndDetail(
+            ex.getStatusCode(),
+            message
         );
 
-        return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);
+        problemDetail.setTitle("Error");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return problemDetail;
     }
 }
