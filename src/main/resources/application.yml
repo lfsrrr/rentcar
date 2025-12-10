@@ -73,46 +73,28 @@ spring:
   aop.proxy-target-class: false
 
   # ==============================================================================
-  # D a t e n b a nk
+  # D a t e n b a n k
   # ==============================================================================
-  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties.data
   datasource:
-    username: Change Me! # als System-Property oder Umgebungsvariable
-    password: Change Me! # als System-Property oder Umgebungsvariable
-    url: Change Me! # als System-Property oder Umgebungsvariable
+    # URL für Docker Compose Umgebung (Hostname 'postgres') oder lokal ('localhost')
+    # Wenn du den Service lokal startest und Docker auf Port 5432 läuft:
+    url: jdbc:postgresql://localhost:5432/postgres
+    # Wenn der Service im Container läuft:
+    # url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: p
+    driver-class-name: org.postgresql.Driver
 
-  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties.data-migration
-#  flyway.create-schemas: false
-
-  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties.data
-#  jpa:
-#    #database-platform: POSTGRESQL
-#    hibernate:
-#      # https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
-#      #ddl-auto: none
-#      naming.physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-#    open-in-view: false
-#    properties:
-#      # https://docs.jboss.org/hibernate/orm/current/javadocs/org/hibernate/cfg/AvailableSettings.html
-#      # https://docs.jboss.org/hibernate/orm/current/javadocs/org/hibernate/cfg/Environment.html
-#      hibernate:
-#        #default_schema: kunde
-#        flushMode: COMMIT
-#        jdbc:
-#          time_zone: Europe/Berlin
-#          batch_versioned_data: true
-#          #fetch_size: 10
-#        order_inserts: true
-#        order_updates: true
-#        session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 20
-#        xml_mapping_enabled: false
-#        #mapping.default_list_semantics: LIST
-#      # https://stackoverflow.com/questions/31585698/spring-boot-jpa2-hibernate-enable-second-level-cache
-#      # https://jakarta.ee/xml/ns/persistence
-#      # https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd
-#      jakarta.persistence:
-#        sharedCache.mode: ENABLE_SELECTIVE
-#        validation.mode: NONE
+  # JPA / Hibernate Konfiguration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      # 'update' aktualisiert das Schema automatisch (gut für Dev), 'validate' für Prod
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
   # siehe org.springframework.boot.autoconfigure.jackson.JacksonProperties
   jackson.default-property-inclusion: non_null

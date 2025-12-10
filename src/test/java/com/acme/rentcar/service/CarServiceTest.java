@@ -5,109 +5,71 @@ import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.entity.EngineType;
 import com.acme.rentcar.repository.CarRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
-import org.assertj.core.api.SoftAssertions;
-import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
-import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-/// Implementiert den Unit-Test
+/// Implementiert den Unit-Test für CarService mit Mockito.
 @Tag("unit")
-@Tag("service-read")
-@ExtendWith(SoftAssertionsExtension.class)
-@DisplayName("Geschaeftslogik fuer Lesen testen (Unit-Test)")
-final class CarServiceTest {
+@Tag("service")
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Geschäftslogik testen (Unit-Test)")
+class CarServiceTest {
 
-    private static final String ID_VORHANDEN = "c0714b62-9e9f-43b6-905c-d5f9d14620f1";
-    private static final String HERSTELLER_VORHANDEN = "BMW";
-    private static final String UNKNOWN_HERSTELLER = "Opel";
+    @Mock
+    private CarRepository repository;
 
-    private final CarService service;
+    @InjectMocks
+    private CarService service;
 
-    @InjectSoftAssertions
-    @SuppressWarnings("NullAway.Init")
-    private SoftAssertions softly;
-
-    /// Initialisiert den CarService
-    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
-    CarServiceTest() {
-        final CarRepository repo;
-        try {
-
-            final Class<?> fakeClass = Class.forName("com.acme.rentcar.repository.CarRepositoryFake");
-
-            final var constructor = fakeClass.getDeclaredConstructor();
-            constructor.setAccessible(true);
-
-            repo = (CarRepository) constructor.newInstance();
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("Konnte Fake-Repository nicht laden: " + e.getMessage(), e);
-        }
-
-        service = new CarService(repo);
-    }
-
-    /// Testet die findby-Funktion
-    /// @param id ist die ID des Autos
-    @ParameterizedTest(name = "[{index}] Suche mit vorhandener ID: id={0}")
-    @ValueSource(strings = ID_VORHANDEN)
-    @DisplayName("Suche Auto mit id")
-    void findById(final String id) {
-
-        final var carId = UUID.fromString(id);
-
-
-        final var car = service.findById(carId);
-
-
-        assertThat(car).isNotNull()
-            .extracting(Car::getId)
-            .isEqualTo(carId);
-    }
-
-    /// Erfolgreiches Suchen des Herstellers
-    /// @param hersteller ist der name des Autoherstellers
-    @ParameterizedTest(name = "[{index}] Suche mit vorhandenem Hersteller: hersteller={0}")
-    @ValueSource(strings = HERSTELLER_VORHANDEN)
-    @DisplayName("Suche Auto mit vorhandenem Hersteller")
-    void findByHersteller(final String hersteller) {
-
-
-
-        final var cars = service.findByHersteller(hersteller);
-
-
-        softly.assertThat(cars)
-            .isNotNull()
-            .isNotEmpty();
-
-        cars.stream()
-            .map(Car::getHersteller)
-            .forEach(herstellerTmp -> softly.assertThat(herstellerTmp)
-                .isEqualTo(HERSTELLER_VORHANDEN));
-    }
-
-    /// Testet, dass ein Hersteller nicht gefunen wurde und das Objekt leer ist
     @Test
-    @DisplayName("Suche Auto mit unbekanntem Hersteller (Keine Treffer)")
-    void findByHerstellerNichtVorhanden() {
-        //given
+    @DisplayName("Suche Auto mit ID (Mock)")
+    void findById() {
+        // given
+        final var id = UUID.randomUUID();
+        final var car = new Car();
+        car.setId(id);
+        // repository.findCarById statt findById verwenden
+        when(repository.findCarById(id)).thenReturn(car);
 
-        //when
-        final var cars = service.findByHersteller(UNKNOWN_HERSTELLER);
+        // when
+        final var result = service.findById(id);
 
-        //then
-        assertThat(cars).isNotNull().isEmpty();
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(id);
+        verify(repository).findCarById(id);
     }
 
-    /// Test für Neuanlegen (Create)
+    @Test
+    @DisplayName("Suche Auto nach Hersteller (Mock)")
+    void findByHersteller() {
+        // given
+        final var hersteller = "BMW";
+        final var car = new Car();
+        car.setHersteller(hersteller);
+        when(repository.findByHerstellerIgnoreCase(hersteller)).thenReturn(List.of(car));
+
+        // when
+        final var result = service.findByHersteller(hersteller);
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.iterator().next().getHersteller()).isEqualTo(hersteller);
+        verify(repository).findByHerstellerIgnoreCase(hersteller);
+    }
+
     @Test
     @DisplayName("Neues Auto anlegen (Create)")
     void createCar() {
@@ -122,12 +84,27 @@ final class CarServiceTest {
             "Silber"
         );
 
+        // Wir simulieren das Speichern: Das Repo gibt das Auto zurück, das rein kam (ggf. mit generierter ID)
+        when(repository.save(any(Car.class))).thenAnswer(invocation -> {
+            final var car = (Car) invocation.getArgument(0);
+            if (car.getId() == null) {
+                car.setId(UUID.randomUUID()); // Simuliere ID-Generierung
+            }
+            // Simuliere Details-ID
+            if (car.getDetails().getId() == null) {
+                car.getDetails().setId(UUID.randomUUID());
+            }
+            return car;
+        });
+
         // when
         final var result = service.create(dto);
 
         // then
         assertThat(result).isNotNull();
+        assertThat(result.getId()).isNotNull();
         assertThat(result.getHersteller()).isEqualTo("Mercedes");
         assertThat(result.getDetails().getFarbe()).isEqualTo("Silber");
+        verify(repository).save(any(Car.class));
     }
 }

@@ -53,25 +53,25 @@ services:
     # https://docs.docker.com/engine/storage/volumes
     volumes:
       - type: bind
-        source: ..\..\..\src\main\resources\private-key.pem
+        # macOS: Forward Slashes verwenden
+        source: ../../../src/main/resources/private-key.pem
         target: /workspace/BOOT-INF/classes/private-key.pem
         # Dockerfile statt Buildpacks fuer Image:
         #target: /workspace/private-key.pem
         read_only: true
       - type: bind
-        source: ..\..\..\src\main\resources\certificate.crt
+        # macOS: Forward Slashes verwenden
+        source: ../../../src/main/resources/certificate.crt
         target: /workspace/BOOT-INF/classes/certificate.crt
         # Dockerfile statt Buildpacks fuer Image:
         #target: /workspace/certificate.crt
         read_only: true
-      # macOS: "Named Volume" statt "Bind Mounts" waeren eigentlich besser
-      # ABER dann muesste z.B. PostgreSQL fuer Kubernetes ein zweites Mal aufgesetzt werden :-(
-      # DESHALB muss das Docker Image so gebaut werden, dass der Container mit dem Linux-User "root" laeuft :-(
+
+      # FIX: Pfad angepasst auf deinen lokalen Pfad
       - type: bind
-        source: C:\Zimmermann\volumes\rentcar-v1
-        # macOS: Verzeichnis mit Zugriffsrechten 777 anlegen, d.h. chmod 777 /usr/local/volumes/tmp
-        #source: /usr/local/volumes/tmp
+        source: /Users/louis/Zimmermann/volumes/rentcar-v1
         target: /tmp
+
     # https://docs.docker.com/compose/environment-variables/set-environment-variables
     env_file: .env
     hostname: rentcar

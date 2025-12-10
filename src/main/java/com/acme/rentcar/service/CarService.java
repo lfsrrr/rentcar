@@ -12,19 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 /// Service-Schicht für die Verwaltung von Autos.
-/// Verwendet StableValue für den Logger.
 @Service
+@Transactional
 @SuppressWarnings("preview")
-public final class CarService {
+public class CarService {
 
-    private static final StableValue<Logger> LOGGER = StableValue.of();
-
-    static {
-        LOGGER.setOrThrow(LoggerFactory.getLogger(CarService.class));
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarService.class);
 
     private final CarRepository repository;
 
@@ -38,22 +35,25 @@ public final class CarService {
     /// Findet alle Autos.
     ///
     /// @return Eine Collection aller Autos.
+    @Transactional(readOnly = true)
     public Collection<Car> findAll() {
         final var cars = repository.findAll();
-        LOGGER.orElseThrow().debug("findAll: {} Autos gefunden", cars.size());
+        LOGGER.debug("findAll: {} Autos gefunden", cars.size());
         return cars;
     }
-
 
     /// Findet ein Auto per ID.
     ///
     /// @param id Die ID des Autos.
     /// @return Das gefundene Auto.
     /// @throws ResponseStatusException Wenn das Auto nicht gefunden wird (404).
+    @Transactional(readOnly = true)
     public Car findById(final UUID id) {
-        final var car = repository.findById(id);
+        // Nutzt findCarById, das direkt Car (oder null) zurückgibt
+        // Die Methode im Repository heißt jetzt findCarById, nicht findById!
+        final var car = repository.findCarById(id);
         if (car == null) {
-            LOGGER.orElseThrow().warn("findById: Auto mit ID {} nicht gefunden", id);
+            LOGGER.warn("findById: Auto mit ID {} nicht gefunden", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found with ID: " + id);
         }
         return car;
@@ -63,8 +63,9 @@ public final class CarService {
     ///
     /// @param hersteller Der Herstellername.
     /// @return Liste der passenden Autos.
+    @Transactional(readOnly = true)
     public Collection<Car> findByHersteller(final String hersteller) {
-        return repository.findByHersteller(hersteller);
+        return repository.findByHerstellerIgnoreCase(hersteller);
     }
 
     /// Erstellt ein neues Auto aus einem DTO (POST-Logik).
@@ -72,16 +73,17 @@ public final class CarService {
     /// @param dto Die Eingabedaten.
     /// @return Das gespeicherte Auto.
     public Car create(final CarDTO dto) {
-        LOGGER.orElseThrow().debug("create: Transformiere DTO zu Entity: {}", dto);
+        LOGGER.debug("create: Transformiere DTO zu Entity: {}", dto);
         final var newCar = new Car();
-        newCar.setId(UUID.randomUUID());
+        // ID wird durch @GeneratedValue in der Entity erzeugt
+
         newCar.setHersteller(dto.hersteller());
         newCar.setModell(dto.modell());
         newCar.setKennzeichen(dto.kennzeichen());
         newCar.setErstzulassung(dto.erstzulassung());
 
         final var details = new CarDetails(
-            UUID.randomUUID(),
+            null, // ID wird generiert
             dto.farbe(),
             dto.sitzplaetze(),
             dto.motor(),
@@ -91,7 +93,7 @@ public final class CarService {
         newCar.setRentals(List.of());
 
         final var savedCar = repository.save(newCar);
-        LOGGER.orElseThrow().info("create: Auto erfolgreich gespeichert: {}", savedCar.getId());
+        LOGGER.info("create: Auto erfolgreich gespeichert: {}", savedCar.getId());
         return savedCar;
     }
 
@@ -102,9 +104,9 @@ public final class CarService {
     /// @return Das aktualisierte Auto.
     /// @throws ResponseStatusException Wenn das Auto nicht gefunden wird (404).
     public Car update(final UUID id, final CarDTO dto) {
-        LOGGER.orElseThrow().debug("update: Aktualisiere Auto {}", id);
+        LOGGER.debug("update: Aktualisiere Auto {}", id);
 
-        // 1. Prüfen ob vorhanden (findById wirft 404)
+        // 1. Prüfen ob vorhanden (findById wirft Exception bei null)
         final var existingCar = findById(id);
 
         // 2. Mapping
@@ -114,13 +116,14 @@ public final class CarService {
         existingCar.setErstzulassung(dto.erstzulassung());
 
         final var details = existingCar.getDetails();
-        details.setFarbe(dto.farbe());
-        details.setSitzplaetze(dto.sitzplaetze());
-        details.setMotor(dto.motor());
-        details.setBaujahr(Year.of(dto.erstzulassung().getYear()));
+        if (details != null) {
+            details.setFarbe(dto.farbe());
+            details.setSitzplaetze(dto.sitzplaetze());
+            details.setMotor(dto.motor());
+            details.setBaujahr(Year.of(dto.erstzulassung().getYear()));
+        }
 
         // 3. Update im Repository
-        repository.update(existingCar);
-        return existingCar;
+        return repository.save(existingCar);
     }
 }

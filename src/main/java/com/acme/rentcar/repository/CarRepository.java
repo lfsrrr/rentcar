@@ -4,11 +4,15 @@ import com.acme.rentcar.entity.Car;
 import java.util.Collection;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.repository.Repository;
 
-/// Repository Interface ohne Optional, dafür mit JSpecify Null-Annotationen.
+/// Repository für die Verwaltung von Car-Entities.
 ///
-/// Definiert die grundlegenden CRUD-Operationen für die Verwaltung von Car Objekten.
-public interface CarRepository {
+/// Verwendet das Basis-Interface `Repository` statt `JpaRepository`, um
+/// die Verwendung von `Optional` zu vermeiden und stattdessen mit
+/// `@Nullable` (JSpecify) zu arbeiten.
+@org.springframework.stereotype.Repository
+public interface CarRepository extends Repository<Car, UUID> {
 
     /// Findet alle gespeicherten Autos.
     ///
@@ -17,27 +21,23 @@ public interface CarRepository {
 
     /// Findet ein Auto anhand der ID.
     ///
+    /// Wir verwenden hier `findCarById` statt `findById`, da Spring Data JPA
+    /// für `findById` standardmäßig `Optional` erzwingt.
+    ///
     /// @param id Die UUID des gesuchten Autos.
     /// @return Das gefundene Car Objekt oder null, wenn es nicht existiert.
     @Nullable
-    Car findById(UUID id);
+    Car findCarById(UUID id);
 
-    /// Sucht nach Autos eines bestimmten Herstellers.
+    /// Sucht nach Autos eines bestimmten Herstellers (Case-Insensitive).
     ///
-    /// @param hersteller Der Name des Herstellers, nach dem gefiltert werden soll.
-    /// @return Eine Collection von Autos, die diesem Hersteller entsprechen.
-    Collection<Car> findByHersteller(String hersteller);
+    /// @param hersteller Der Name des Herstellers.
+    /// @return Eine Collection von Autos.
+    Collection<Car> findByHerstellerIgnoreCase(String hersteller);
 
-    /// Speichert ein neues Auto oder überschreibt ein existierendes, je nach Implementierung.
+    /// Speichert ein neues Auto oder überschreibt ein existierendes.
     ///
     /// @param car Das zu speichernde Car Objekt.
     /// @return Das persistierte Car Objekt.
     Car save(Car car);
-
-    /// Aktualisiert ein bestehendes Auto.
-    ///
-    /// @param car Das Car Objekt mit den aktualisierten Daten.
-    /// @return Das aktualisierte Car Objekt oder null, wenn die ID nicht gefunden wurde.
-    @Nullable
-    Car update(Car car);
 }
