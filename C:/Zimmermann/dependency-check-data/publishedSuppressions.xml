@@ -2413,4 +2413,53 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    <packageUrl regex="true">^pkg:maven/com\.azure\.resourcemanager/azure-resourcemanager-msi@.*$</packageUrl>
    <cpe>cpe:/a:microsoft:azure_identity_sdk</cpe>
 </suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8164
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-starter-liquibase@.*$</packageUrl>
+   <cpe>cpe:/a:liquibase:liquibase</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8165
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-liquibase@.*$</packageUrl>
+   <cpe>cpe:/a:liquibase:liquibase</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8168
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.micronaut\.jsonschema/micronaut-json-schema-utils@.*$</packageUrl>
+   <cpe>cpe:/a:utils_project:utils</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8169
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.micronaut\.jsonschema/micronaut-json-schema-utils@.*$</packageUrl>
+   <cpe>cpe:/a:cron-utils_project:cron-utils</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8176
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/jakarta\.enterprise/jakarta\.enterprise\.lang-model@.*$</packageUrl>
+   <cpe>cpe:/a:model_project:model</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8183
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.jetbrains\.exposed/exposed-kotlin-datetime@.*$</packageUrl>
+   <cpe>cpe:/a:jetbrains:kotlin</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #8184
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.opentelemetry/opentelemetry-exporter-prometheus@.*$</packageUrl>
+   <cpe>cpe:/a:prometheus:prometheus</cpe>
+</suppress>
 </suppressions>

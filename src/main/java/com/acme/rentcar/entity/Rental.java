@@ -1,21 +1,54 @@
 package com.acme.rentcar.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-///
 /// Repräsentiert einen Mietvorgang.
-///
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Rental {
 
+    @Id
+    @GeneratedValue
+    @Nullable
     private UUID id;
+
+    @Version
+    private int version;
+
     private LocalDate mietbeginn;
     private LocalDate mietende;
     private BigDecimal gesamtpreis;
+
+    @ManyToOne
+    @Nullable
     private Customer customer;
+
+    // Optional: Falls du die Car-ID hier speichern willst
+    @Nullable
     private UUID carId;
+
+    @CreatedDate
+    @Nullable
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Nullable
+    private LocalDateTime updated;
 
     /// Initialisiert das Rental-Objekt.
     @SuppressWarnings("NullAway.Init")
@@ -23,15 +56,8 @@ public class Rental {
     }
 
     /// Erstellt einen neuen Mietvorgang.
-    ///
-    /// @param id Die ID.
-    /// @param mietbeginn Startdatum.
-    /// @param mietende Enddatum.
-    /// @param gesamtpreis Der Gesamtpreis.
-    /// @param customer Der Kunde.
-    /// @param carId Die ID des Autos.
-    public Rental(final UUID id, final LocalDate mietbeginn, final LocalDate mietende,
-                  final BigDecimal gesamtpreis, final Customer customer, final UUID carId) {
+    public Rental(@Nullable final UUID id, final LocalDate mietbeginn, final LocalDate mietende,
+                  final BigDecimal gesamtpreis, @Nullable final Customer customer, @Nullable final UUID carId) {
         this.id = id;
         this.mietbeginn = mietbeginn;
         this.mietende = mietende;
@@ -54,83 +80,48 @@ public class Rental {
     public String toString() {
         return "Rental{" +
             "id=" + id +
+            ", version=" + version +
             ", mietbeginn=" + mietbeginn +
             ", mietende=" + mietende +
             ", gesamtpreis=" + gesamtpreis +
             ", customer=" + customer +
             ", carId=" + carId +
+            ", created=" + created +
+            ", updated=" + updated +
             '}';
     }
 
-    /// Gibt die ID zurück.
-    /// @return Die ID.
-    public UUID getId() {
-        return id;
-    }
+    // --- Getter und Setter ---
 
-    /// Setzt die ID.
-    /// @param id Die ID.
-    public void setId(final UUID id) {
-        this.id = id;
-    }
+    @Nullable
+    public UUID getId() { return id; }
+    public void setId(@Nullable final UUID id) { this.id = id; }
 
-    /// Gibt den Mietbeginn zurück.
-    /// @return Das Startdatum.
-    public LocalDate getMietbeginn() {
-        return mietbeginn;
-    }
+    public int getVersion() { return version; }
+    public void setVersion(final int version) { this.version = version; }
 
-    /// Setzt den Mietbeginn.
-    /// @param mietbeginn Das Startdatum.
-    public void setMietbeginn(final LocalDate mietbeginn) {
-        this.mietbeginn = mietbeginn;
-    }
+    public LocalDate getMietbeginn() { return mietbeginn; }
+    public void setMietbeginn(final LocalDate mietbeginn) { this.mietbeginn = mietbeginn; }
 
-    /// Gibt das Mietende zurück.
-    /// @return Das Enddatum.
-    public LocalDate getMietende() {
-        return mietende;
-    }
+    public LocalDate getMietende() { return mietende; }
+    public void setMietende(final LocalDate mietende) { this.mietende = mietende; }
 
-    /// Setzt das Mietende.
-    /// @param mietende Das Enddatum.
-    public void setMietende(final LocalDate mietende) {
-        this.mietende = mietende;
-    }
+    public BigDecimal getGesamtpreis() { return gesamtpreis; }
+    public void setGesamtpreis(final BigDecimal gesamtpreis) { this.gesamtpreis = gesamtpreis; }
 
-    /// Gibt den Gesamtpreis zurück.
-    /// @return Der Preis.
-    public BigDecimal getGesamtpreis() {
-        return gesamtpreis;
-    }
+    @Nullable
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(@Nullable final Customer customer) { this.customer = customer; }
 
-    /// Setzt den Gesamtpreis.
-    /// @param gesamtpreis Der Preis.
-    public void setGesamtpreis(final BigDecimal gesamtpreis) {
-        this.gesamtpreis = gesamtpreis;
-    }
+    @Nullable
+    public UUID getCarId() { return carId; }
+    public void setCarId(@Nullable final UUID carId) { this.carId = carId; }
 
-    /// Gibt den Kunden zurück.
-    /// @return Der Kunde.
-    public Customer getCustomer() {
-        return customer;
-    }
+    @Nullable
+    public LocalDateTime getCreated() { return created; }
+    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
 
-    /// Setzt den Kunden.
-    /// @param customer Der Kunde.
-    public void setCustomer(final Customer customer) {
-        this.customer = customer;
-    }
-
-    /// Gibt die Auto-ID zurück.
-    /// @return Die Auto-ID.
-    public UUID getCarId() {
-        return carId;
-    }
-
-    /// Setzt die Auto-ID.
-    /// @param carId Die Auto-ID.
-    public void setCarId(final UUID carId) {
-        this.carId = carId;
-    }
+    @Nullable
+    public LocalDateTime getUpdated() { return updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
 }

@@ -4,6 +4,7 @@ import com.acme.rentcar.entity.Car;
 import java.util.Collection;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.Repository;
 
 /// Repository für die Verwaltung von Car-Entities.
@@ -12,8 +13,7 @@ import org.springframework.data.repository.Repository;
 /// die Verwendung von `Optional` zu vermeiden und stattdessen mit
 /// `@Nullable` (JSpecify) zu arbeiten.
 @org.springframework.stereotype.Repository
-public interface CarRepository extends Repository<Car, UUID> {
-
+public interface CarRepository extends Repository<Car, UUID>, JpaSpecificationExecutor<Car> {
     /// Findet alle gespeicherten Autos.
     ///
     /// @return Eine Collection aller vorhandenen Car Instanzen.

@@ -1,35 +1,59 @@
 package com.acme.rentcar.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Objects;
 import java.util.UUID;
-import org.jspecify.annotations.Nullable;
 
-/// Technische Details zu einem Auto als JPA Entity.
 @Entity
+@EntityListeners(AuditingEntityListener.class) // Wichtig für created/updated
 public class CarDetails {
 
     @Id
     @GeneratedValue
-    @Nullable // Fix: Field can be null before persistence
+    @Nullable
     private UUID id;
 
+    // --- Fehlendes Feld: Version ---
+    @Version
+    private int version;
+
+    @Nullable
     private String farbe;
+
     private int sitzplaetze;
+
+    @Nullable
     private EngineType motor;
+
+    @Nullable
     private Year baujahr;
 
-    /// Erstellt eine leere Instanz von CarDetails (für JPA).
+    // --- Fehlende Felder: Auditing ---
+    @CreatedDate
+    @Nullable
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Nullable
+    private LocalDateTime updated;
+
     @SuppressWarnings("NullAway.Init")
     public CarDetails() {
     }
 
-    /// Erstellt neue Auto-Details.
-    public CarDetails(@Nullable final UUID id, final String farbe, final int sitzplaetze,
-                      final EngineType motor, final Year baujahr) {
+    public CarDetails(@Nullable final UUID id, @Nullable final String farbe, final int sitzplaetze,
+                      @Nullable final EngineType motor, @Nullable final Year baujahr) {
         this.id = id;
         this.farbe = farbe;
         this.sitzplaetze = sitzplaetze;
@@ -51,53 +75,45 @@ public class CarDetails {
     public String toString() {
         return "CarDetails{" +
             "id=" + id +
+            ", version=" + version +
             ", farbe='" + farbe + '\'' +
             ", sitzplaetze=" + sitzplaetze +
             ", motor=" + motor +
             ", baujahr=" + baujahr +
+            ", created=" + created +
+            ", updated=" + updated +
             '}';
     }
 
     // --- Getter und Setter ---
 
-    @Nullable // Fix: Getter returns nullable
-    public UUID getId() {
-        return id;
-    }
+    @Nullable
+    public UUID getId() { return id; }
+    public void setId(@Nullable final UUID id) { this.id = id; }
 
-    public void setId(@Nullable final UUID id) { // Fix: Setter accepts nullable
-        this.id = id;
-    }
+    public int getVersion() { return version; }
+    public void setVersion(final int version) { this.version = version; }
 
-    public String getFarbe() {
-        return farbe;
-    }
+    @Nullable
+    public String getFarbe() { return farbe; }
+    public void setFarbe(@Nullable final String farbe) { this.farbe = farbe; }
 
-    public void setFarbe(final String farbe) {
-        this.farbe = farbe;
-    }
+    public int getSitzplaetze() { return sitzplaetze; }
+    public void setSitzplaetze(final int sitzplaetze) { this.sitzplaetze = sitzplaetze; }
 
-    public int getSitzplaetze() {
-        return sitzplaetze;
-    }
+    @Nullable
+    public EngineType getMotor() { return motor; }
+    public void setMotor(@Nullable final EngineType motor) { this.motor = motor; }
 
-    public void setSitzplaetze(final int sitzplaetze) {
-        this.sitzplaetze = sitzplaetze;
-    }
+    @Nullable
+    public Year getBaujahr() { return baujahr; }
+    public void setBaujahr(@Nullable final Year baujahr) { this.baujahr = baujahr; }
 
-    public EngineType getMotor() {
-        return motor;
-    }
+    @Nullable
+    public LocalDateTime getCreated() { return created; }
+    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
 
-    public void setMotor(final EngineType motor) {
-        this.motor = motor;
-    }
-
-    public Year getBaujahr() {
-        return baujahr;
-    }
-
-    public void setBaujahr(final Year baujahr) {
-        this.baujahr = baujahr;
-    }
+    @Nullable
+    public LocalDateTime getUpdated() { return updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
 }

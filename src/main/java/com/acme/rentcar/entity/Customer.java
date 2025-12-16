@@ -1,35 +1,53 @@
 package com.acme.rentcar.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Version;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-///
 /// Kunde der Autovermietung.
-///
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 @SuppressWarnings("checkstyle:HiddenField")
 public class Customer {
 
+    @Id
+    @GeneratedValue
+    @Nullable
     private UUID id;
+
+    @Version
+    private int version;
+
     private String vorname;
     private String nachname;
     private String email;
     private LocalDate geburtsdatum;
 
+    @CreatedDate
+    @Nullable
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Nullable
+    private LocalDateTime updated;
+
     /// Initialisiert das Customer-Objekt (Standardkonstruktor).
     @SuppressWarnings("NullAway.Init")
     public Customer() {
-
     }
 
-    /// Erstellt ein Customer-Objekt.
-    ///
-    /// @param id Die eindeutige ID des Kunden.
-    /// @param vorname Der Vorname des Kunden.
-    /// @param nachname Der Nachname des Kunden.
-    /// @param email Die E-Mail-Adresse des Kunden.
-    /// @param geburtsdatum Das Geburtsdatum des Kunden.
-    public Customer(final UUID id, final String vorname, final String nachname,
+    public Customer(@Nullable final UUID id, final String vorname, final String nachname,
                     final String email, final LocalDate geburtsdatum) {
         this.id = id;
         this.vorname = vorname;
@@ -37,7 +55,6 @@ public class Customer {
         this.email = email;
         this.geburtsdatum = geburtsdatum;
     }
-
 
     @Override
     public boolean equals(final Object other) {
@@ -53,70 +70,42 @@ public class Customer {
     public String toString() {
         return "Customer{" +
             "id=" + id +
+            ", version=" + version +
             ", vorname='" + vorname + '\'' +
             ", nachname='" + nachname + '\'' +
             ", email='" + email + '\'' +
             ", geburtsdatum=" + geburtsdatum +
+            ", created=" + created +
+            ", updated=" + updated +
             '}';
     }
 
-    /// Gibt die ID zurück.
-    /// @return Die ID.
-    public UUID getId() {
-        return id;
-    }
+    // --- Getter und Setter ---
 
-    /// Setzt die ID.
-    /// @param id Die neue ID.
-    public void setId(final UUID id) {
-        this.id = id;
-    }
+    @Nullable
+    public UUID getId() { return id; }
+    public void setId(@Nullable final UUID id) { this.id = id; }
 
-    /// Gibt den Vornamen zurück.
-    /// @return Der Vorname.
-    public String getVorname() {
-        return vorname;
-    }
+    public int getVersion() { return version; }
+    public void setVersion(final int version) { this.version = version; }
 
-    /// Setzt den Vornamen.
-    /// @param vorname Der neue Vorname.
-    public void setVorname(final String vorname) {
-        this.vorname = vorname;
-    }
+    public String getVorname() { return vorname; }
+    public void setVorname(final String vorname) { this.vorname = vorname; }
 
-    /// Gibt den Nachnamen zurück.
-    /// @return Der Nachname.
-    public String getNachname() {
-        return nachname;
-    }
+    public String getNachname() { return nachname; }
+    public void setNachnamen(final String nachname) { this.nachname = nachname; }
 
-    /// Setzt den Nachnamen.
-    /// @param nachname Der neue Nachname.
-    public void setNachnamen(final String nachname) {
-        this.nachname = nachname;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(final String email) { this.email = email; }
 
-    /// Gibt die E-Mail-Adresse zurück.
-    /// @return Die E-Mail-Adresse.
-    public String getEmail() {
-        return email;
-    }
+    public LocalDate getGeburtsdatum() { return geburtsdatum; }
+    public void setGeburtsdatum(final LocalDate geburtsdatum) { this.geburtsdatum = geburtsdatum; }
 
-    /// Setzt die E-Mail-Adresse.
-    /// @param email Die neue E-Mail-Adresse.
-    public void setEmail(final String email) {
-        this.email = email;
-    }
+    @Nullable
+    public LocalDateTime getCreated() { return created; }
+    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
 
-    /// Gibt das Geburtsdatum zurück.
-    /// @return Das Geburtsdatum.
-    public LocalDate getGeburtsdatum() {
-        return geburtsdatum;
-    }
-
-    /// Setzt das Geburtsdatum.
-    /// @param geburtsdatum Das neue Geburtsdatum.
-    public void setGeburtsdatum(final LocalDate geburtsdatum) {
-        this.geburtsdatum = geburtsdatum;
-    }
+    @Nullable
+    public LocalDateTime getUpdated() { return updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
 }

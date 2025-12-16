@@ -1,6 +1,5 @@
 package com.acme.rentcar.controller;
 
-import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/// REST-Controller für die Verwaltung von Autos.
-///
-/// ![CarController Diagramm](file:///Users/louis/IdeaProjects/Meilenstein%205/rentCar/target/generated-docs/CarController.svg)
 @RestController
 @RequestMapping("/cars")
 @SuppressWarnings("preview")
@@ -42,15 +38,9 @@ final class CarController {
         this.service = service;
     }
 
-    /// Sucht Autos basierend auf Suchparametern (z.B. ?hersteller=VW&minSitzplaetze=5).
-    ///
-    /// Wenn keine Parameter angegeben sind, werden alle Autos zurückgegeben.
-    ///
-    /// @param searchParams Die Query-Parameter aus der URL.
-    /// @return Eine Liste der gefundenen Autos.
     @Operation(summary = "Autos suchen / filtern")
     @GetMapping
-    Collection<Car> get(@RequestParam(required = false) final MultiValueMap<String, String> searchParams) {
+    Collection<CarDTO> get(@RequestParam(required = false) final MultiValueMap<String, String> searchParams) {
         LOGGER.orElseThrow().debug("GET /cars mit params: {}", searchParams);
         return service.find(searchParams);
     }
@@ -59,28 +49,27 @@ final class CarController {
     @ApiResponse(responseCode = "200", description = "Auto gefunden")
     @ApiResponse(responseCode = "404", description = "Auto nicht gefunden")
     @GetMapping("/{id}")
-    ResponseEntity<Car> getById(@PathVariable final UUID id) {
-        final var car = service.findById(id);
-        // ETag wird automatisch durch ShallowEtagHeaderFilter gesetzt (in WebConfig)
-        return ResponseEntity.ok(car);
+    ResponseEntity<CarDTO> getById(@PathVariable final UUID id) {
+        final var carDto = service.findById(id);
+        return ResponseEntity.ok(carDto);
     }
 
     @Operation(summary = "Neues Auto anlegen")
     @ApiResponse(responseCode = "201", description = "Erfolgreich angelegt")
     @PostMapping
     ResponseEntity<Void> createCar(@RequestBody @Valid final CarDTO carDto) {
-        final var newCar = service.create(carDto);
+        final var createdCar = service.create(carDto);
         final var location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(newCar.getId())
+            .buildAndExpand(createdCar.id()) // Zugriff auf ID im Record ist id(), nicht getId()
             .toUri();
         return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Auto aktualisieren")
     @PutMapping("/{id}")
-    ResponseEntity<Car> updateCar(
+    ResponseEntity<CarDTO> updateCar(
         @PathVariable final UUID id,
         @RequestBody @Valid final CarDTO carDto
     ) {
