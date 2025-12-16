@@ -4,7 +4,6 @@ import com.acme.rentcar.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import java.lang.StableValue;
 import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -21,6 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+/// REST-Controller für die Verwaltung von Autos.
+///
+/// Dieser Controller stellt die API-Endpunkte bereit, um Fahrzeuge zu suchen,
+/// Details abzurufen, neue Fahrzeuge anzulegen und bestehende Daten zu aktualisieren.
+/// Er fungiert als Schnittstelle zwischen dem HTTP-Client (z.B. Browser, Bruno) und
+/// der Geschäftslogik im [CarService].
+///
+/// Diagramm zur Struktur:
+/// ![CarController Diagramm](file:///Users/louis/IdeaProjects/Meilenstein%205/rentCar/target/generated-docs/CarController.svg)
 @RestController
 @RequestMapping("/cars")
 @SuppressWarnings("preview")
@@ -34,10 +42,18 @@ final class CarController {
 
     private final CarService service;
 
+    /// Erstellt den Controller und injiziert den benötigten Service.
     CarController(final CarService service) {
         this.service = service;
     }
 
+    /// Sucht nach Autos basierend auf flexiblen Filterkriterien.
+    ///
+    /// Clients können Parameter wie `?hersteller=VW` oder `?minSitzplaetze=5` übergeben.
+    /// Werden keine Parameter angegeben, liefert die Methode eine Liste aller vorhandenen Autos.
+    ///
+    /// @param searchParams Eine Map aller Query-Parameter aus der URL.
+    /// @return Eine Liste von [CarDTO] Objekten, die den Kriterien entsprechen.
     @Operation(summary = "Autos suchen / filtern")
     @GetMapping
     Collection<CarDTO> get(@RequestParam(required = false) final MultiValueMap<String, String> searchParams) {
@@ -45,6 +61,11 @@ final class CarController {
         return service.find(searchParams);
     }
 
+    /// Ruft die Details eines spezifischen Autos anhand seiner ID ab.
+    ///
+    /// @param id Die UUID des gesuchten Autos.
+    /// @return Das gefundene Auto als [CarDTO] mit Status 200 OK.
+    ///         Wirft eine Exception (404), wenn das Auto nicht existiert.
     @Operation(summary = "Auto per ID suchen")
     @ApiResponse(responseCode = "200", description = "Auto gefunden")
     @ApiResponse(responseCode = "404", description = "Auto nicht gefunden")
@@ -54,6 +75,14 @@ final class CarController {
         return ResponseEntity.ok(carDto);
     }
 
+    /// Legt ein neues Auto in der Datenbank an.
+    ///
+    /// Die übergebenen Daten werden vor der Verarbeitung validiert (z.B. Pflichtfelder, Formate).
+    /// Nach erfolgreicher Erstellung wird der Status 201 Created zurückgegeben, zusammen mit
+    /// dem `Location`-Header, der auf die URL des neuen Autos verweist.
+    ///
+    /// @param carDto Die Daten des neuen Autos (ohne ID).
+    /// @return Eine leere Antwort mit Status 201 und Location-Header.
     @Operation(summary = "Neues Auto anlegen")
     @ApiResponse(responseCode = "201", description = "Erfolgreich angelegt")
     @PostMapping
@@ -62,11 +91,19 @@ final class CarController {
         final var location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(createdCar.id()) // Zugriff auf ID im Record ist id(), nicht getId()
+            // Zugriff auf ID im Record ist id(), nicht getId()
+            .buildAndExpand(createdCar.id())
             .toUri();
         return ResponseEntity.created(location).build();
     }
 
+    /// Aktualisiert die Daten eines bestehenden Autos.
+    ///
+    /// Überschreibt die Eigenschaften des Autos mit der ID `id` mit den Werten aus `carDto`.
+    ///
+    /// @param id     Die UUID des zu ändernden Autos.
+    /// @param carDto Die neuen Daten für das Auto.
+    /// @return Das aktualisierte Auto als [CarDTO] mit Status 200 OK.
     @Operation(summary = "Auto aktualisieren")
     @PutMapping("/{id}")
     ResponseEntity<CarDTO> updateCar(

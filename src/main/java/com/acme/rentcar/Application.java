@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-
 import static com.acme.rentcar.Banner.TEXT;
 
 /// Klasse mit der `main`-Methode für die Anwendung auf Basis von _Spring Boot_.
@@ -15,7 +14,7 @@ import static com.acme.rentcar.Banner.TEXT;
 @SpringBootApplication(proxyBeanMethods = false)
 @Import({WebConfig.class, DevConfig.class})
 @EnableJpaAuditing
-@SuppressWarnings({"ImplicitSubclassInspection", "ClassUnconnectedToPackage"})
+@SuppressWarnings({"ClassUnconnectedToPackage"})
 public final class Application {
     private Application() {
     }
