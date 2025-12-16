@@ -28,9 +28,11 @@ import static org.mockito.Mockito.when;
 class CarServiceTest {
 
     @Mock
+    @SuppressWarnings("NullAway.Init") // Mockito initialisiert dieses Feld via Reflection
     private CarRepository repository;
 
     @InjectMocks
+    @SuppressWarnings("NullAway.Init") // Mockito initialisiert dieses Feld via Reflection
     private CarService service;
 
     @Test
@@ -40,7 +42,9 @@ class CarServiceTest {
         final var id = UUID.randomUUID();
         final var car = new Car();
         car.setId(id);
-        // repository.findCarById statt findById verwenden
+
+        // WICHTIG: Wir mocken hier 'findCarById', da dies die Methode ist,
+        // die der Service intern aufruft (statt der Standard 'findById').
         when(repository.findCarById(id)).thenReturn(car);
 
         // when
@@ -59,6 +63,8 @@ class CarServiceTest {
         final var hersteller = "BMW";
         final var car = new Car();
         car.setHersteller(hersteller);
+
+        // WICHTIG: Wir mocken 'findByHerstellerIgnoreCase'
         when(repository.findByHerstellerIgnoreCase(hersteller)).thenReturn(List.of(car));
 
         // when
@@ -84,13 +90,13 @@ class CarServiceTest {
             "Silber"
         );
 
-        // Wir simulieren das Speichern: Das Repo gibt das Auto zurück, das rein kam (ggf. mit generierter ID)
+        // Wir simulieren das Speichern: Das Repo gibt das Auto zurück, das rein kam.
+        // Wir simulieren, dass die DB eine ID generiert hat.
         when(repository.save(any(Car.class))).thenAnswer(invocation -> {
             final var car = (Car) invocation.getArgument(0);
             if (car.getId() == null) {
-                car.setId(UUID.randomUUID()); // Simuliere ID-Generierung
+                car.setId(UUID.randomUUID());
             }
-            // Simuliere Details-ID
             if (car.getDetails().getId() == null) {
                 car.getDetails().setId(UUID.randomUUID());
             }
