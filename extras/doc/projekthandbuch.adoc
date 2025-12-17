@@ -46,7 +46,7 @@ Dieses Projekthandbuch dokumentiert den Microservice "rentcar", der für die Ver
 include::./use-cases.plantuml[]
 ----
 
-Die Architektur basiert auf Spring Boot. Folgendes Diagramm zeigt die groben Komponenten.
+Die Architektur basiert auf Spring Boot. Folgendes Diagramm zeigt die groben Komponenten. Test
 
 .Komponenten des Microservice "rentcar"
 [plantuml,komponenten,svg]

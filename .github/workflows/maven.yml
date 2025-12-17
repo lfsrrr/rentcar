@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ] 
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ] 
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -17,19 +17,19 @@ jobs:
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '21' 
+        java-version: '25'
         distribution: 'temurin'
-        cache: maven 
+        cache: maven
 
     # 3. Haupt-Build & Statische Analyse (OHNE IMAGE BUILD)
-    # Wir nutzen 'verify' anstelle von 'install', um zu kompilieren, Tests auszuführen 
+    # Wir nutzen 'verify' anstelle von 'install', um zu kompilieren, Tests auszuführen
     # und Plugins wie den Enforcer zu triggern, ohne den letzten Schritt des Image-Baus.
     - name: Maven Build, Verify & Site Generation
       run: |
         # Führt Kompilierung, statische Analysen (Enforcer) und Tests aus (falls aktiviert)
         # Wenn Sie sicher sind, dass Tests übersprungen werden sollen (wie im Meilenstein gefordert):
         mvn -B verify -D'maven.test.skip=true' --file pom.xml
-        
+
         # Generiert die Berichte für Checkstyle, PMD und SpotBugs
         mvn site -D'maven.test.skip=true' --file pom.xml
 
