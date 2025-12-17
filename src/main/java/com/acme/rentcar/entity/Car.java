@@ -1,86 +1,106 @@
 package com.acme.rentcar.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/// Car Entity repräsentiert ein Auto in der Datenbank.
+/// Repräsentiert ein Kraftfahrzeug in der Datenbank.
 ///
-/// Diese Klasse ist eine JPA-Entity, die auf die entsprechende Datenbanktabelle gemappt wird.
-/// Sie speichert alle relevanten Informationen zu einem Fahrzeug, einschließlich technischer
-/// Details und Mietvorgängen.
+/// Diese Entity ist der zentrale Bestandteil der Autovermietung. Sie speichert die
+/// Stammdaten eines Fahrzeugs (wie Hersteller und Modell) und hält Referenzen zu
+/// technischen Details sowie zu den getätigten Mietvorgängen.
+///
+/// Technische Hinweise:
+/// - Verwendet [AuditingEntityListener] für automatische Zeitstempel.
+/// - Unterstützt Optimistic Locking via `@Version`.
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @SuppressWarnings("PMD.ShortClassName")
 public class Car {
 
-    /// Die eindeutige ID des Autos.
-    ///
-    /// Wird automatisch von der Datenbank oder dem Persistence-Provider generiert.
+    /// Die eindeutige ID des Autos (Primary Key).
+    /// Wird beim Persistieren automatisch durch die Datenbank generiert.
     @Id
     @GeneratedValue
+    @Nullable
     private UUID id;
 
-    /// Versionsnummer für optimistisches Locking.
-    ///
-    /// Dient dazu, gleichzeitige Änderungen (Lost Updates) zu verhindern.
-    /// Wird von JPA automatisch verwaltet.
+    /// Versionsnummer für Optimistic Locking.
+    /// Verhindert "Lost Updates", wenn mehrere Transaktionen gleichzeitig
+    /// das gleiche Auto bearbeiten wollen.
     @Version
     private int version;
 
-    /// Der Name des Herstellers (z.B. BMW, Volkswagen).
+    /// Der Name des Herstellers (z.B. "BMW", "Volkswagen").
     private String hersteller;
 
-    /// Die Modellbezeichnung des Fahrzeugs (z.B. Golf 8, M4).
+    /// Die Modellbezeichnung des Fahrzeugs (z.B. "Golf 8", "M4 Competition").
     private String modell;
 
-    /// Das Datum der Erstzulassung des Fahrzeugs.
+    /// Das Datum der Erstzulassung.
     private LocalDate erstzulassung;
 
-    /// Das amtliche Kennzeichen des Fahrzeugs (z.B. KA-AB-123).
+    /// Das amtliche Kennzeichen des Fahrzeugs (z.B. "KA-AB-123").
     private String kennzeichen;
 
     /// Technische Details zum Auto (1:1 Beziehung).
     ///
-    /// Die Details werden in einer separaten Entity (`CarDetails`) gespeichert.
-    /// `CascadeType.ALL` sorgt dafür, dass Änderungen an `Car` (z.B. Löschen)
-    /// auch auf `CarDetails` übertragen werden.
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    /// Diese Beziehung ist als `LAZY` konfiguriert, d.h. die Details werden erst
+    /// bei direktem Zugriff aus der Datenbank geladen, um Performance zu sparen.
+    /// `CascadeType.ALL` sorgt dafür, dass Änderungen hier automatisch gespeichert werden.
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Nullable
     private CarDetails details;
 
     /// Liste der Mietvorgänge für dieses Auto (1:N Beziehung).
-    ///
-    /// Ein Auto kann mehrere Mietvorgänge haben. Auch hier werden Änderungen
-    /// kaskadiert.
+    /// Ein Auto kann beliebig oft vermietet werden.
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
 
+    /// Zeitstempel der Erstellung.
+    /// Wird automatisch von Spring Data JPA gesetzt.
+    @CreatedDate
+    @Nullable
+    private LocalDateTime created;
+
+    /// Zeitstempel der letzten Änderung.
+    /// Wird automatisch aktualisiert, sobald sich ein Feld ändert.
+    @LastModifiedDate
+    @Nullable
+    private LocalDateTime updated;
+
     /// Standard-Konstruktor für JPA.
-    ///
-    /// Dieser Konstruktor ist notwendig, damit JPA-Implementierungen (wie Hibernate)
-    /// Instanzen dieser Klasse per Reflection erstellen können.
+    /// Darf nicht direkt im Code verwendet werden, sondern dient nur der Reflexion durch Hibernate.
     @SuppressWarnings("NullAway.Init")
     public Car() {
     }
 
     /// Erstellt ein neues Auto mit allen Eigenschaften.
     ///
-    /// @param id Die eindeutige ID des Autos (kann null sein, wenn sie generiert wird).
-    /// @param hersteller Der Name des Herstellers.
-    /// @param modell Die Modellbezeichnung.
+    /// @param id            Die ID (meist `null` beim Erstellen).
+    /// @param hersteller    Der Herstellername.
+    /// @param modell        Das Fahrzeugmodell.
     /// @param erstzulassung Datum der ersten Zulassung.
-    /// @param kennzeichen Das amtliche Kennzeichen.
-    /// @param details Referenz auf die technischen Details.
-    /// @param rentals Liste der zugehörigen Mietverträge.
-    public Car(final UUID id, final String hersteller, final String modell, final LocalDate erstzulassung,
-               final String kennzeichen, final CarDetails details, final List<Rental> rentals) {
+    /// @param kennzeichen   Das Kennzeichen.
+    /// @param details       Zusätzliche technische Details (optional).
+    /// @param rentals       Liste der bisherigen Vermietungen.
+    public Car(@Nullable final UUID id, final String hersteller, final String modell, final LocalDate erstzulassung,
+               final String kennzeichen, @Nullable final CarDetails details, final List<Rental> rentals) {
         this.id = id;
         this.hersteller = hersteller;
         this.modell = modell;
@@ -90,26 +110,16 @@ public class Car {
         this.rentals = rentals;
     }
 
-    /// Überprüft die Gleichheit zweier Car-Objekte basierend auf der ID.
-    ///
-    /// @param other Das zu vergleichende Objekt.
-    /// @return `true`, wenn die Objekte identisch sind (gleiche ID), sonst `false`.
     @Override
     public boolean equals(final Object other) {
         return other instanceof Car car && Objects.equals(id, car.id);
     }
 
-    /// Berechnet den Hash-Code basierend auf der ID.
-    ///
-    /// @return Der Hash-Code.
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
     }
 
-    /// Gibt eine String-Repräsentation des Autos zurück.
-    ///
-    /// @return Ein String mit den wichtigsten Eigenschaften des Autos.
     @Override
     public String toString() {
         return "Car{" +
@@ -121,120 +131,134 @@ public class Car {
             ", kennzeichen='" + kennzeichen + '\'' +
             ", details=" + details +
             ", rentals=" + rentals +
+            ", created=" + created +
+            ", updated=" + updated +
             '}';
     }
 
     // --- Getter und Setter ---
 
-    /// Gibt die ID des Autos zurück.
+    /// Liefert die Datenbank-ID des Autos.
     ///
-    /// @return Die UUID.
+    /// @return Die UUID oder `null`, falls noch nicht persistiert.
+    @Nullable
     public UUID getId() {
-        return id;
-    }
+        return id; }
 
-    /// Setzt die ID des Autos.
+    /// Setzt die Datenbank-ID.
     ///
     /// @param id Die neue UUID.
-    public void setId(final UUID id) {
-        this.id = id;
-    }
+    public void setId(@Nullable final UUID id) {
+        this.id = id; }
 
-    /// Gibt die Version des Datensatzes zurück.
+    /// Liefert die aktuelle Versionsnummer.
     ///
-    /// @return Die Versionsnummer.
+    /// @return Die Version für Optimistic Locking.
     public int getVersion() {
-        return version;
-    }
+        return version; }
 
-    /// Setzt die Version (sollte i.d.R. nicht manuell gesetzt werden).
+    /// Setzt die Versionsnummer
     ///
-    /// @param version Die neue Version.
+    /// @param version Die neue Versionsnummer.
     public void setVersion(final int version) {
-        this.version = version;
-    }
+        this.version = version; }
 
-    /// Gibt den Hersteller zurück.
+    /// Liefert den Hersteller.
     ///
-    /// @return Der Herstellername.
+    /// @return Der Name des Herstellers.
     public String getHersteller() {
-        return hersteller;
-    }
+        return hersteller; }
 
     /// Setzt den Hersteller.
     ///
     /// @param hersteller Der neue Herstellername.
     public void setHersteller(final String hersteller) {
-        this.hersteller = hersteller;
-    }
+        this.hersteller = hersteller; }
 
-    /// Gibt das Modell zurück.
+    /// Liefert das Modell.
     ///
     /// @return Die Modellbezeichnung.
     public String getModell() {
-        return modell;
-    }
+        return modell; }
 
     /// Setzt das Modell.
     ///
-    /// @param modell Die neue Modellbezeichnung.
+    /// @param modell Das neue Modell.
     public void setModell(final String modell) {
-        this.modell = modell;
-    }
+        this.modell = modell; }
 
-    /// Gibt das Datum der Erstzulassung zurück.
+    /// Liefert das Erstzulassungsdatum.
     ///
-    /// @return Das Erstzulassungsdatum.
-    public LocalDate getErstzulassung() {
-        return erstzulassung;
-    }
+    /// @return Das Datum der Erstzulassung.
+    public LocalDate getErstzulassung() { return erstzulassung; }
 
-    /// Setzt das Datum der Erstzulassung.
+    /// Setzt das Erstzulassungsdatum.
     ///
     /// @param erstzulassung Das neue Datum.
     public void setErstzulassung(final LocalDate erstzulassung) {
-        this.erstzulassung = erstzulassung;
-    }
+        this.erstzulassung = erstzulassung; }
 
-    /// Gibt das Kennzeichen zurück.
+    /// Liefert das Kennzeichen.
     ///
-    /// @return Das Kennzeichen.
+    /// @return Das amtliche Kennzeichen.
     public String getKennzeichen() {
-        return kennzeichen;
-    }
+        return kennzeichen; }
 
     /// Setzt das Kennzeichen.
     ///
     /// @param kennzeichen Das neue Kennzeichen.
     public void setKennzeichen(final String kennzeichen) {
-        this.kennzeichen = kennzeichen;
-    }
+        this.kennzeichen = kennzeichen; }
 
-    /// Gibt die technischen Details zurück.
+    /// Liefert die technischen Details.
+    /// Hinweis: Kann `null` sein, wenn keine Details hinterlegt sind.
     ///
-    /// @return Das `CarDetails`-Objekt.
+    /// @return Das CarDetails-Objekt oder `null`.
+    @Nullable
     public CarDetails getDetails() {
-        return details;
-    }
+        return details; }
 
-    /// Setzt die technischen Details.
+    /// Verknüpft technische Details mit diesem Auto.
     ///
-    /// @param details Das neue `CarDetails`-Objekt.
-    public void setDetails(final CarDetails details) {
-        this.details = details;
-    }
+    /// @param details Die zu verknüpfenden Details.
+    public void setDetails(@Nullable final CarDetails details) {
+        this.details = details; }
 
-    /// Gibt die Liste der Mietvorgänge zurück.
+    /// Liefert die Liste aller Mietvorgänge.
     ///
-    /// @return Eine Liste von `Rental`-Objekten.
+    /// @return Eine Liste der Rentals.
     public List<Rental> getRentals() {
-        return rentals;
-    }
+        return rentals; }
 
     /// Setzt die Liste der Mietvorgänge.
     ///
-    /// @param rentals Die neue Liste von Mietvorgängen.
+    /// @param rentals Die neue Liste.
     public void setRentals(final List<Rental> rentals) {
-        this.rentals = rentals;
-    }
+        this.rentals = rentals; }
+
+    /// Liefert den Zeitstempel der Erstellung.
+    ///
+    /// @return Der Zeitpunkt der Erstellung.
+    @Nullable
+    public LocalDateTime getCreated() {
+        return created; }
+
+    /// Setzt den Erstellungszeitpunkt.
+    ///
+    /// @param created Der neue Zeitpunkt.
+    public void setCreated(@Nullable final LocalDateTime created) {
+        this.created = created; }
+
+    /// Liefert den Zeitstempel der letzten Änderung.
+    ///
+    /// @return Der Zeitpunkt der letzten Aktualisierung.
+    @Nullable
+    public LocalDateTime getUpdated() {
+        return updated; }
+
+    /// Setzt den Änderungszeitpunkt.
+    ///
+    /// @param updated Der neue Zeitpunkt.
+    public void setUpdated(@Nullable final LocalDateTime updated) {
+        this.updated = updated; }
 }

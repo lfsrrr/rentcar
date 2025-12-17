@@ -1,115 +1,116 @@
 package com.acme.rentcar.service;
 
 import com.acme.rentcar.controller.CarDTO;
+import com.acme.rentcar.controller.CarMapper;
 import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.entity.CarDetails;
 import com.acme.rentcar.repository.CarRepository;
+import com.acme.rentcar.repository.CarSpecifications;
 import java.time.Year;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ResponseStatusException;
 
-/// Service-Schicht für die Verwaltung von Autos.
+/// Service-Klasse für die Verwaltung von Autos.
+///
+/// Diese Komponente kapselt die Geschäftslogik und die Transaktionssteuerung.
+/// Sie nimmt Anfragen vom Controller entgegen, interagiert mit dem [CarRepository]
+/// und konvertiert die Ergebnisse mittels [CarMapper] in DTOs.
 @Service
 @Transactional
 @SuppressWarnings("preview")
 public class CarService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarService.class);
-
     private final CarRepository repository;
+    private final CarMapper mapper;
 
-    /// Erstellt den Service.
+    /// Erstellt eine neue Instanz des Services.
     ///
-    /// @param repository Das Repository für den Datenzugriff.
-    CarService(final CarRepository repository) {
+    /// @param repository Das Repository für den Datenbankzugriff.
+    /// @param mapper     Der Mapper für die Konvertierung zwischen Entity und DTO.
+    public CarService(final CarRepository repository, final CarMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    /// Findet alle Autos.
+    /// Sucht Autos basierend auf dynamischen Filterkriterien.
     ///
-    /// @return Eine Collection aller Autos.
+    /// Die Filter werden über Query-Parameter (z.B. `?hersteller=BMW`) übergeben und
+    /// mithilfe von JPA Specifications in eine Datenbankabfrage übersetzt.
+    /// Das Ergebnis wird nach Hersteller aufsteigend sortiert.
+    ///
+    /// @param searchParams Eine Map der Query-Parameter aus der URL.
+    /// @return Eine Liste der gefundenen Autos als [CarDTO].
     @Transactional(readOnly = true)
-    public Collection<Car> findAll() {
-        final var cars = repository.findAll();
-        LOGGER.debug("findAll: {} Autos gefunden", cars.size());
-        return cars;
+    public Collection<CarDTO> find(final MultiValueMap<String, String> searchParams) {
+        final Specification<Car> spec = CarSpecifications.withCriteria(searchParams);
+
+        // Suche mit Specification und Sortierung
+        final var cars = repository.findAll(spec, Sort.by("hersteller").ascending());
+
+        LOGGER.debug("find: {} Autos gefunden", cars.size());
+        return mapper.toDTOs(cars);
     }
 
-    /// Findet ein Auto per ID.
+    /// Lädt ein einzelnes Auto anhand seiner eindeutigen ID.
     ///
-    /// @param id Die ID des Autos.
-    /// @return Das gefundene Auto.
-    /// @throws ResponseStatusException Wenn das Auto nicht gefunden wird (404).
+    /// @param id Die UUID des gesuchten Autos.
+    /// @return Das gefundene Auto als [CarDTO].
+    /// @throws ResponseStatusException (404 Not Found), wenn kein Auto mit dieser ID existiert.
     @Transactional(readOnly = true)
-    public Car findById(final UUID id) {
-        // Nutzt findCarById, das direkt Car (oder null) zurückgibt
-        // Die Methode im Repository heißt jetzt findCarById, nicht findById!
+    public CarDTO findById(final UUID id) {
         final var car = repository.findCarById(id);
         if (car == null) {
-            LOGGER.warn("findById: Auto mit ID {} nicht gefunden", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found with ID: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found");
         }
-        return car;
+        return mapper.toDTO(car);
     }
 
-    /// Findet Autos nach Hersteller.
+    /// Legt ein neues Auto inklusive technischer Details in der Datenbank an.
     ///
-    /// @param hersteller Der Herstellername.
-    /// @return Liste der passenden Autos.
-    @Transactional(readOnly = true)
-    public Collection<Car> findByHersteller(final String hersteller) {
-        return repository.findByHerstellerIgnoreCase(hersteller);
-    }
-
-    /// Erstellt ein neues Auto aus einem DTO (POST-Logik).
+    /// Erstellt die [Car] und [CarDetails] Entities manuell aus dem übergebenen DTO,
+    /// verknüpft diese und speichert sie persistiert ab.
     ///
-    /// @param dto Die Eingabedaten.
-    /// @return Das gespeicherte Auto.
-    public Car create(final CarDTO dto) {
-        LOGGER.debug("create: Transformiere DTO zu Entity: {}", dto);
-        final var newCar = new Car();
-        // ID wird durch @GeneratedValue in der Entity erzeugt
+    /// @param dto Das DTO mit den Daten des neuen Autos.
+    /// @return Das gespeicherte Auto als DTO (inklusive der generierten ID).
+    public CarDTO create(final CarDTO dto) {
+        final var newCar = new Car(null, dto.hersteller(), dto.modell(), dto.erstzulassung(),
+            dto.kennzeichen(), null, List.of());
 
-        newCar.setHersteller(dto.hersteller());
-        newCar.setModell(dto.modell());
-        newCar.setKennzeichen(dto.kennzeichen());
-        newCar.setErstzulassung(dto.erstzulassung());
+        final var details = new CarDetails(null, dto.farbe(), dto.sitzplaetze(),
+            dto.motor(), Year.of(dto.erstzulassung().getYear()));
 
-        final var details = new CarDetails(
-            null, // ID wird generiert
-            dto.farbe(),
-            dto.sitzplaetze(),
-            dto.motor(),
-            Year.of(dto.erstzulassung().getYear())
-        );
         newCar.setDetails(details);
-        newCar.setRentals(List.of());
-
         final var savedCar = repository.save(newCar);
-        LOGGER.info("create: Auto erfolgreich gespeichert: {}", savedCar.getId());
-        return savedCar;
+
+        return mapper.toDTO(savedCar);
     }
 
-    /// Aktualisiert ein Auto basierend auf dem DTO (PUT-Logik).
+    /// Aktualisiert die Daten eines bestehenden Autos.
     ///
-    /// @param id Die ID des zu aktualisierenden Autos.
+    /// Lädt das Auto aus der Datenbank und überschreibt die Felder mit den Werten aus dem DTO.
+    /// Aktualisiert auch die verknüpften technischen Details ([CarDetails]).
+    ///
+    /// @param id  Die ID des zu aktualisierenden Autos.
     /// @param dto Die neuen Daten.
-    /// @return Das aktualisierte Auto.
-    /// @throws ResponseStatusException Wenn das Auto nicht gefunden wird (404).
-    public Car update(final UUID id, final CarDTO dto) {
-        LOGGER.debug("update: Aktualisiere Auto {}", id);
+    /// @return Das aktualisierte Auto als DTO.
+    /// @throws ResponseStatusException (404 Not Found), wenn das Auto nicht gefunden wurde.
+    public CarDTO update(final UUID id, final CarDTO dto) {
+        final var existingCar = repository.findCarById(id);
+        if (existingCar == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found");
+        }
 
-        // 1. Prüfen ob vorhanden (findById wirft Exception bei null)
-        final var existingCar = findById(id);
-
-        // 2. Mapping
         existingCar.setHersteller(dto.hersteller());
         existingCar.setModell(dto.modell());
         existingCar.setKennzeichen(dto.kennzeichen());
@@ -123,7 +124,7 @@ public class CarService {
             details.setBaujahr(Year.of(dto.erstzulassung().getYear()));
         }
 
-        // 3. Update im Repository
-        return repository.save(existingCar);
+        final var savedCar = repository.save(existingCar);
+        return mapper.toDTO(savedCar);
     }
 }
