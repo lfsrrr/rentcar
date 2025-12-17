@@ -9,7 +9,6 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Objects;
@@ -110,85 +109,101 @@ public class CarDetails {
     ///
     /// @return Die UUID oder `null`, falls noch nicht gespeichert.
     @Nullable
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id; }
 
     /// Setzt die ID der Details.
     ///
     /// @param id Die neue UUID.
-    public void setId(@Nullable final UUID id) { this.id = id; }
+    public void setId(@Nullable final UUID id) {
+        this.id = id; }
 
     /// Liefert die Versionsnummer für Optimistic Locking.
     ///
     /// @return Die aktuelle Version.
-    public int getVersion() { return version; }
+    public int getVersion() {
+        return version; }
 
     /// Setzt die Versionsnummer.
     ///
     /// @param version Die neue Version.
-    public void setVersion(final int version) { this.version = version; }
+    public void setVersion(final int version) {
+        this.version = version; }
 
     /// Liefert die Außenlackierung.
     ///
     /// @return Die Farbe als String.
     @Nullable
-    public String getFarbe() { return farbe; }
+    public String getFarbe() {
+        return farbe; }
 
     /// Setzt die Außenlackierung.
     ///
     /// @param farbe Die neue Farbe.
-    public void setFarbe(@Nullable final String farbe) { this.farbe = farbe; }
+    public void setFarbe(@Nullable final String farbe) {
+        this.farbe = farbe; }
 
     /// Liefert die Anzahl der verfügbaren Sitzplätze.
     ///
     /// @return Die Anzahl der Sitze.
-    public int getSitzplaetze() { return sitzplaetze; }
+    public int getSitzplaetze() {
+        return sitzplaetze; }
 
     /// Setzt die Anzahl der Sitzplätze.
     ///
     /// @param sitzplaetze Die neue Anzahl.
-    public void setSitzplaetze(final int sitzplaetze) { this.sitzplaetze = sitzplaetze; }
+    public void setSitzplaetze(final int sitzplaetze) {
+        this.sitzplaetze = sitzplaetze; }
 
     /// Liefert den Antriebstyp des Fahrzeugs.
     ///
     /// @return Der Motortyp (z.B. BENZIN, DIESEL).
     @Nullable
-    public EngineType getMotor() { return motor; }
+    public EngineType getMotor() {
+        return motor; }
 
     /// Setzt den Antriebstyp.
     ///
     /// @param motor Der neue Motortyp.
-    public void setMotor(@Nullable final EngineType motor) { this.motor = motor; }
+    public void setMotor(@Nullable final EngineType motor) {
+        this.motor = motor; }
 
     /// Liefert das Baujahr des Fahrzeugs.
     ///
     /// @return Das Baujahr als [Year]-Objekt.
     @Nullable
-    public Year getBaujahr() { return baujahr; }
+    public Year getBaujahr() {
+        return baujahr; }
 
     /// Setzt das Baujahr.
     ///
     /// @param baujahr Das neue Baujahr.
-    public void setBaujahr(@Nullable final Year baujahr) { this.baujahr = baujahr; }
+    public void setBaujahr(@Nullable final Year baujahr) {
+        this.baujahr = baujahr; }
 
     /// Liefert den Zeitpunkt der Erstellung des Datensatzes.
     ///
     /// @return Das Erstellungsdatum.
     @Nullable
-    public LocalDateTime getCreated() { return created; }
+    public LocalDateTime getCreated() {
+        return created; }
 
     /// Setzt das Erstellungsdatum (meist automatisch durch JPA).
     ///
     /// @param created Das neue Datum.
-    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
+    public void setCreated(@Nullable final LocalDateTime created) {
+        this.created = created; }
 
     /// Liefert den Zeitpunkt der letzten Änderung.
     ///
     /// @return Das Änderungsdatum.
     @Nullable
-    public LocalDateTime getUpdated() { return updated; }
+    public LocalDateTime getUpdated() {
+        return updated; }
 
     /// Setzt das Änderungsdatum (meist automatisch durch JPA).
     ///
     /// @param updated Das neue Datum.
-    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) {
+        this.updated = updated; }
 }

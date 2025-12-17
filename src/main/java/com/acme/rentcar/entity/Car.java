@@ -142,42 +142,50 @@ public class Car {
     ///
     /// @return Die UUID oder `null`, falls noch nicht persistiert.
     @Nullable
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id; }
 
     /// Setzt die Datenbank-ID.
     ///
     /// @param id Die neue UUID.
-    public void setId(@Nullable final UUID id) { this.id = id; }
+    public void setId(@Nullable final UUID id) {
+        this.id = id; }
 
     /// Liefert die aktuelle Versionsnummer.
     ///
     /// @return Die Version für Optimistic Locking.
-    public int getVersion() { return version; }
+    public int getVersion() {
+        return version; }
 
-    /// Setzt die Versionsnummer (meistens nur intern genutzt).
+    /// Setzt die Versionsnummer
     ///
     /// @param version Die neue Versionsnummer.
-    public void setVersion(final int version) { this.version = version; }
+    public void setVersion(final int version) {
+        this.version = version; }
 
     /// Liefert den Hersteller.
     ///
     /// @return Der Name des Herstellers.
-    public String getHersteller() { return hersteller; }
+    public String getHersteller() {
+        return hersteller; }
 
     /// Setzt den Hersteller.
     ///
     /// @param hersteller Der neue Herstellername.
-    public void setHersteller(final String hersteller) { this.hersteller = hersteller; }
+    public void setHersteller(final String hersteller) {
+        this.hersteller = hersteller; }
 
     /// Liefert das Modell.
     ///
     /// @return Die Modellbezeichnung.
-    public String getModell() { return modell; }
+    public String getModell() {
+        return modell; }
 
     /// Setzt das Modell.
     ///
     /// @param modell Das neue Modell.
-    public void setModell(final String modell) { this.modell = modell; }
+    public void setModell(final String modell) {
+        this.modell = modell; }
 
     /// Liefert das Erstzulassungsdatum.
     ///
@@ -187,59 +195,70 @@ public class Car {
     /// Setzt das Erstzulassungsdatum.
     ///
     /// @param erstzulassung Das neue Datum.
-    public void setErstzulassung(final LocalDate erstzulassung) { this.erstzulassung = erstzulassung; }
+    public void setErstzulassung(final LocalDate erstzulassung) {
+        this.erstzulassung = erstzulassung; }
 
     /// Liefert das Kennzeichen.
     ///
     /// @return Das amtliche Kennzeichen.
-    public String getKennzeichen() { return kennzeichen; }
+    public String getKennzeichen() {
+        return kennzeichen; }
 
     /// Setzt das Kennzeichen.
     ///
     /// @param kennzeichen Das neue Kennzeichen.
-    public void setKennzeichen(final String kennzeichen) { this.kennzeichen = kennzeichen; }
+    public void setKennzeichen(final String kennzeichen) {
+        this.kennzeichen = kennzeichen; }
 
     /// Liefert die technischen Details.
     /// Hinweis: Kann `null` sein, wenn keine Details hinterlegt sind.
     ///
     /// @return Das CarDetails-Objekt oder `null`.
     @Nullable
-    public CarDetails getDetails() { return details; }
+    public CarDetails getDetails() {
+        return details; }
 
     /// Verknüpft technische Details mit diesem Auto.
     ///
     /// @param details Die zu verknüpfenden Details.
-    public void setDetails(@Nullable final CarDetails details) { this.details = details; }
+    public void setDetails(@Nullable final CarDetails details) {
+        this.details = details; }
 
     /// Liefert die Liste aller Mietvorgänge.
     ///
     /// @return Eine Liste der Rentals.
-    public List<Rental> getRentals() { return rentals; }
+    public List<Rental> getRentals() {
+        return rentals; }
 
     /// Setzt die Liste der Mietvorgänge.
     ///
     /// @param rentals Die neue Liste.
-    public void setRentals(final List<Rental> rentals) { this.rentals = rentals; }
+    public void setRentals(final List<Rental> rentals) {
+        this.rentals = rentals; }
 
     /// Liefert den Zeitstempel der Erstellung.
     ///
     /// @return Der Zeitpunkt der Erstellung.
     @Nullable
-    public LocalDateTime getCreated() { return created; }
+    public LocalDateTime getCreated() {
+        return created; }
 
     /// Setzt den Erstellungszeitpunkt.
     ///
     /// @param created Der neue Zeitpunkt.
-    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
+    public void setCreated(@Nullable final LocalDateTime created) {
+        this.created = created; }
 
     /// Liefert den Zeitstempel der letzten Änderung.
     ///
     /// @return Der Zeitpunkt der letzten Aktualisierung.
     @Nullable
-    public LocalDateTime getUpdated() { return updated; }
+    public LocalDateTime getUpdated() {
+        return updated; }
 
     /// Setzt den Änderungszeitpunkt.
     ///
     /// @param updated Der neue Zeitpunkt.
-    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) {
+        this.updated = updated; }
 }

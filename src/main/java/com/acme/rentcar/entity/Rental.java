@@ -129,94 +129,112 @@ public class Rental {
     ///
     /// @return Die UUID oder `null`, falls noch nicht persistiert.
     @Nullable
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id; }
 
     /// Setzt die ID des Mietvorgangs.
     ///
     /// @param id Die neue UUID.
-    public void setId(@Nullable final UUID id) { this.id = id; }
+    public void setId(@Nullable final UUID id) {
+        this.id = id; }
 
     /// Liefert die Versionsnummer.
     ///
     /// @return Die aktuelle Version (für Optimistic Locking).
-    public int getVersion() { return version; }
+    public int getVersion() {
+        return version; }
 
     /// Setzt die Versionsnummer.
     ///
     /// @param version Die neue Versionsnummer.
-    public void setVersion(final int version) { this.version = version; }
+    public void setVersion(final int version) {
+        this.version = version; }
 
     /// Liefert das Datum des Mietbeginns.
     ///
     /// @return Das Startdatum.
-    public LocalDate getMietbeginn() { return mietbeginn; }
+    public LocalDate getMietbeginn() {
+        return mietbeginn; }
 
     /// Setzt den Mietbeginn.
     ///
     /// @param mietbeginn Das neue Startdatum.
-    public void setMietbeginn(final LocalDate mietbeginn) { this.mietbeginn = mietbeginn; }
+    public void setMietbeginn(final LocalDate mietbeginn) {
+        this.mietbeginn = mietbeginn; }
 
     /// Liefert das Datum des Mietendes.
     ///
     /// @return Das Rückgabedatum.
-    public LocalDate getMietende() { return mietende; }
+    public LocalDate getMietende() {
+        return mietende; }
 
     /// Setzt das Mietende.
     ///
     /// @param mietende Das neue Rückgabedatum.
-    public void setMietende(final LocalDate mietende) { this.mietende = mietende; }
+    public void setMietende(final LocalDate mietende) {
+        this.mietende = mietende; }
 
     /// Liefert den Gesamtpreis.
     ///
     /// @return Der Preis als BigDecimal.
-    public BigDecimal getGesamtpreis() { return gesamtpreis; }
+    public BigDecimal getGesamtpreis() {
+        return gesamtpreis; }
 
     /// Setzt den Gesamtpreis.
     ///
     /// @param gesamtpreis Der neue Preis.
-    public void setGesamtpreis(final BigDecimal gesamtpreis) { this.gesamtpreis = gesamtpreis; }
+    public void setGesamtpreis(final BigDecimal gesamtpreis) {
+        this.gesamtpreis = gesamtpreis; }
 
     /// Liefert den zugehörigen Kunden.
     ///
     /// @return Das Customer-Objekt oder `null`.
     @Nullable
-    public Customer getCustomer() { return customer; }
+    public Customer getCustomer() {
+        return customer; }
 
     /// Ordnet einen Kunden zu.
     ///
     /// @param customer Der Kunde.
-    public void setCustomer(@Nullable final Customer customer) { this.customer = customer; }
+    public void setCustomer(@Nullable final Customer customer) {
+        this.customer = customer; }
 
     /// Liefert die ID des gemieteten Autos.
     ///
     /// @return Die UUID des Autos oder `null`.
     @Nullable
-    public UUID getCarId() { return carId; }
+    public UUID getCarId() {
+        return carId; }
 
     /// Setzt die ID des Autos.
     ///
     /// @param carId Die UUID des Fahrzeugs.
-    public void setCarId(@Nullable final UUID carId) { this.carId = carId; }
+    public void setCarId(@Nullable final UUID carId) {
+        this.carId = carId; }
 
     /// Liefert das Erstellungsdatum.
     ///
     /// @return Der Zeitpunkt der Erstellung.
     @Nullable
-    public LocalDateTime getCreated() { return created; }
+    public LocalDateTime getCreated() {
+        return created; }
 
     /// Setzt das Erstellungsdatum.
     ///
     /// @param created Der neue Zeitpunkt.
-    public void setCreated(@Nullable final LocalDateTime created) { this.created = created; }
+    public void setCreated(@Nullable final LocalDateTime created) {
+        this.created = created; }
 
     /// Liefert das Änderungsdatum.
     ///
     /// @return Der Zeitpunkt der letzten Änderung.
     @Nullable
-    public LocalDateTime getUpdated() { return updated; }
+    public LocalDateTime getUpdated() {
+        return updated; }
 
     /// Setzt das Änderungsdatum.
     ///
     /// @param updated Der neue Zeitpunkt.
-    public void setUpdated(@Nullable final LocalDateTime updated) { this.updated = updated; }
+    public void setUpdated(@Nullable final LocalDateTime updated) {
+        this.updated = updated; }
 }
