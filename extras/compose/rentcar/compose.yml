@@ -34,7 +34,7 @@
 services:
   # https://stackoverflow.com/questions/76345884/how-to-select-specific-services-of-docker-compose-when-using-spring-boot-docker
   rentcar:
-    image: juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
+    image: rentcar/rentcar:2025.10.1-buildpacks-bellsoft
     #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-eclipse
     #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-azul
 
