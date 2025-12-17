@@ -1,10 +1,5 @@
 package com.acme.rentcar.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -14,6 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -190,7 +190,8 @@ public class Car {
     /// Liefert das Erstzulassungsdatum.
     ///
     /// @return Das Datum der Erstzulassung.
-    public LocalDate getErstzulassung() { return erstzulassung; }
+    public LocalDate getErstzulassung() {
+        return erstzulassung; }
 
     /// Setzt das Erstzulassungsdatum.
     ///

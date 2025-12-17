@@ -28,7 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 /// der Geschäftslogik im [CarService].
 ///
 /// Diagramm zur Struktur:
-/// ![CarController Diagramm](file:///Users/louis/IdeaProjects/Meilenstein%205/rentCar/target/generated-docs/CarController.svg)
+/// ![CarController Diagramm](extras/doc/CarController.svg)
 @RestController
 @RequestMapping("/cars")
 @SuppressWarnings("preview")

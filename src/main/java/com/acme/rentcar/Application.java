@@ -14,7 +14,7 @@ import static com.acme.rentcar.Banner.TEXT;
 @SpringBootApplication(proxyBeanMethods = false)
 @Import({WebConfig.class, DevConfig.class})
 @EnableJpaAuditing
-@SuppressWarnings({"ClassUnconnectedToPackage"})
+@SuppressWarnings("ClassUnconnectedToPackage")
 public final class Application {
     private Application() {
     }
