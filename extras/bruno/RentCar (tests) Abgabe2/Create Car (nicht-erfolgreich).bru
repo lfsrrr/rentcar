@@ -1,0 +1,33 @@
+meta {
+  name: Create Car (nicht-erfolgreich)
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://localhost:8443/cars
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-Version: 3.0.0
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "hersteller": "Opel",
+    "modell": "Astra",
+    "kennzeichen": "GG-XX-123",
+    "erstzulassung": "2024-01-01",
+    "motor": "H",
+    "sitzplaetze": -5,
+    "farbe": "Silber"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

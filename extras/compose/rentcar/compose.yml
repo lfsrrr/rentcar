@@ -34,7 +34,7 @@
 services:
   # https://stackoverflow.com/questions/76345884/how-to-select-specific-services-of-docker-compose-when-using-spring-boot-docker
   rentcar:
-    image: juergenzimmermann/rentcar:2025.10.1-buildpacks-bellsoft
+    image: rentcar/rentcar:2025.10.2-buildpacks-bellsoft
     #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-eclipse
     #image: juergenzimmermann/rentcar:2025.10.1-buildpacks-azul
 
@@ -46,6 +46,9 @@ services:
     #entrypoint: ["/bin/bash", "-c", "echo 'Container als bash gestartet.' && sleep infinity"]
     # (d)ash = (Debian) Almquist Shell
     #entrypoint: ["/bin/ash", "-c", "echo 'Container als ash gestartet.' && sleep infinity"]
+
+    networks:
+      - acme-network
     ports:
       - published: 8443
         target: 8443
@@ -89,3 +92,9 @@ services:
       # https://docs.docker.com/compose/compose-file/deploy/#replicas
       #replicas: 2
       #endpoint_mode: vip
+  # <--- HIER EINFÜGEN
+
+    # NEU: Das Netzwerk definieren (am Ende der Datei)
+networks:
+  acme-network:
+    external: true

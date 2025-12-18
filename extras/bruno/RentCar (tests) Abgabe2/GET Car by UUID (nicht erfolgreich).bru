@@ -1,0 +1,16 @@
+meta {
+  name: GET Car by UUID (nicht erfolgreich)
+  type: http
+  seq: 9
+}
+
+get {
+  url: https://localhost:8443/cars/FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
