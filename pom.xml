@@ -807,13 +807,7 @@
                     <maxmem>2048m</maxmem>
                     -->
 
-                    <compilerArgs>
-                        <!-- siehe:   javac -\-help-lint -->
-                        <arg>-Xlint:all,-serial,-processing</arg>
-
-                        <!-- https://errorprone.info/docs/installation -->
-                        <arg>-XDcompilePolicy=simple</arg>
-                        <arg>--should-stop=ifError=FLOW</arg>
+                    <compilerArgs>--enable-preview
                         <!-- https://github.com/google/error-prone/issues/4048#issuecomment-1680735558 -->
                         <!-- https://github.com/uber/NullAway/wiki/Configuration -->
                         <!-- https://github.com/uber/NullAway/wiki/Configuration#maven -->
@@ -864,6 +858,8 @@
                             <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                    <source>25</source>
+                    <target>25</target>
                 </configuration>
                 <!-- https://kotlinlang.org/docs/maven.html#compile-kotlin-and-java-sources -->
                 <executions>

@@ -96,5 +96,5 @@ services:
 
     # NEU: Das Netzwerk definieren (am Ende der Datei)
 networks:
-  acme-network: # <--- HIER EINFÜGEN
+  acme-network:
     external: true
