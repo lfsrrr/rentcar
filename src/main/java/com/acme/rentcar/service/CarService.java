@@ -1,26 +1,26 @@
 package com.acme.rentcar.service;
 
+import jakarta.mail.MessagingException;
 import java.time.Year;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
 import com.acme.rentcar.controller.CarDTO;
 import com.acme.rentcar.controller.CarMapper;
 import com.acme.rentcar.entity.Car;
 import com.acme.rentcar.entity.CarDetails;
 import com.acme.rentcar.repository.CarRepository;
 import com.acme.rentcar.repository.CarSpecifications;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable; // <--- NEU: Import für Nullable
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.lang.Nullable;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper; // <--- WICHTIG
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,18 +36,14 @@ public class CarService {
     private final CarRepository repository;
     private final CarMapper mapper;
 
-    // Wir markieren das Feld als Nullable, damit NullAway zufrieden ist
     @Nullable
     private final JavaMailSender mailSender;
 
-    /// Erstellt eine neue Instanz des Services.
-    /// Wir nutzen ObjectProvider, damit die App auch startet, wenn 'mail' Profil aus ist.
     public CarService(final CarRepository repository,
                       final CarMapper mapper,
                       final ObjectProvider<JavaMailSender> mailSenderProvider) {
         this.repository = repository;
         this.mapper = mapper;
-        // Wenn Bean da ist: nehmen. Wenn nicht: null.
         this.mailSender = mailSenderProvider.getIfAvailable();
     }
 
@@ -102,29 +98,46 @@ public class CarService {
         return mapper.toDTO(savedCar);
     }
 
-    /// Sendet eine E-Mail asynchron.
+    /// Sendet eine E-Mail asynchron (angepasst an das Beispiel des Professors).
     @Async
     protected void sendMail(final Car car) {
-        // SICHERHEITSCHECK: Ist Mail überhaupt aktiviert?
         if (mailSender == null) {
-            LOGGER.warn("Kein MailSender verfügbar (Profil 'mail' inaktiv?). Es wird keine Mail gesendet.");
+            LOGGER.warn("Kein MailSender verfügbar. Es wird keine Mail gesendet.");
             return;
         }
 
-        try {
-            final var message = new SimpleMailMessage();
-            message.setFrom("noreply@rentcar.acme.com");
-            message.setTo("manager@acme.com");
-            message.setSubject("Neues Auto angelegt: " + car.getKennzeichen());
-            message.setText("Hallo,\n\nes wurde ein neues Auto in der Flotte registriert:\n"
-                + "ID: " + car.getId() + "\n"
-                + "Hersteller: " + car.getHersteller() + "\n"
-                + "Modell: " + car.getModell() + "\n\n"
-                + "Viele Grüße,\nIhr RentCar System");
+        // Wir nutzen MimeMessage für HTML-Mails (wie im Skript Seite 1) [cite: 7]
+        final var mimeMessage = mailSender.createMimeMessage();
 
-            mailSender.send(message);
-            LOGGER.info("E-Mail für Auto {} erfolgreich versendet.", car.getId());
-        } catch (Exception e) {
+        try {
+            // 'true' bedeutet: Es ist eine Multipart-Email (Text + HTML) [cite: 8, 15]
+            final var messageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            messageHelper.setFrom("noreply@rentcar.acme.com");
+            messageHelper.setTo("manager@acme.com");
+            messageHelper.setSubject("Neues Auto: " + car.getKennzeichen());
+
+            // 1. Einfacher Text (Fallback) [cite: 12]
+            final var plainText = "Neues Auto angelegt:\n"
+                + "Hersteller: " + car.getHersteller() + "\n"
+                + "Modell: " + car.getModell();
+
+            // 2. HTML Text (Schick formatiert) [cite: 13, 14]
+            final var htmlText = "<h2>Neues Auto registriert</h2>"
+                + "<ul>"
+                + "<li><strong>Hersteller:</strong> " + car.getHersteller() + "</li>"
+                + "<li><strong>Modell:</strong> <em>" + car.getModell() + "</em></li>"
+                + "<li><strong>Kennzeichen:</strong> " + car.getKennzeichen() + "</li>"
+                + "</ul>";
+
+            // Beide Versionen setzen
+            messageHelper.setText(plainText, htmlText);
+
+            mailSender.send(mimeMessage);
+            LOGGER.info("HTML-E-Mail für Auto {} erfolgreich versendet.", car.getId());
+
+        } catch (MessagingException | MailException e) {
+            // Fehler fangen, wie im Skript gezeigt [cite: 17]
             LOGGER.error("Fehler beim Senden der E-Mail: {}", e.getMessage());
         }
     }

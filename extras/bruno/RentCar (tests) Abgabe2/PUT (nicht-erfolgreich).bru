@@ -1,0 +1,37 @@
+meta {
+  name: PUT (nicht-erfolgreich)
+  type: http
+  seq: 6
+}
+
+put {
+  url: https://localhost:8443/cars/c0714b62-9e9f-43b6-905c-d5f9d14620f1
+  body: json
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+headers {
+  Content-Type: application/json
+  X-Version: 3.0.0
+}
+
+body:json {
+  {
+    "hersteller": "BMW",
+    "modell": "M4",
+    "kennzeichen": "123",
+    "erstzulassung": "2023-01-01",
+    "motor": "B",
+    "sitzplaetze": -1,
+    "farbe": "Schwarz"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

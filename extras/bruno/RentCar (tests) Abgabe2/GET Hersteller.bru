@@ -1,0 +1,20 @@
+meta {
+  name: GET Hersteller
+  type: http
+  seq: 7
+}
+
+get {
+  url: https://localhost:8443/cars?hersteller=bmw
+  body: none
+  auth: inherit
+}
+
+params:query {
+  hersteller: bmw
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

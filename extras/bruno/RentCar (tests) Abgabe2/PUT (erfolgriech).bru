@@ -1,0 +1,33 @@
+meta {
+  name: PUT (erfolgriech)
+  type: http
+  seq: 5
+}
+
+put {
+  url: https://localhost:8443/cars/20000000-0000-0000-0000-000000000001
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  X-Version: 3.0.0
+}
+
+body:json {
+  {
+    "hersteller": "BMW",
+    "modell": "M4",
+    "kennzeichen": "KA-MA-11",
+    "erstzulassung": "2023-01-01",
+    "motor": "B",
+    "sitzplaetze": 5,
+    "farbe": "Rot"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

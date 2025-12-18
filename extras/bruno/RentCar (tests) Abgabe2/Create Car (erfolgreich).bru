@@ -1,0 +1,33 @@
+meta {
+  name: Create Car (erfolgreich)
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://localhost:8443/cars
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-Version: 3.0.0
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "hersteller": "BMW",
+    "modell": "M3",
+    "kennzeichen": "M-BM-123",
+    "erstzulassung": "2024-06-01",
+    "motor": "B",
+    "sitzplaetze": 5,
+    "farbe": "Grau"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

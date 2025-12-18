@@ -287,9 +287,9 @@ spring:
   # ==============================================================================
   # M a i l
   # ==============================================================================
-#  mail:
-#    host: localhost
-#    port: 8025
+  mail:
+    host: localhost
+    port: 1025
 
   # https://stackoverflow.com/questions/53723613/how-to-set-enableloggingrequestdetails-true-in-spring-boot#answer-62817587
   mvc.log-request-details: true
